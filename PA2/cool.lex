@@ -17,6 +17,8 @@ import java_cup.runtime.Symbol;
     // Max size of string constants
     static int MAX_STR_CONST = 1024;
 
+    private int comment_open_num = 0;
+
     // For assembling string constants
     StringBuffer string_buf = new StringBuffer();
 
@@ -66,6 +68,15 @@ import java_cup.runtime.Symbol;
 	   ...
 	   break;
  */
+    case LINE_COMMENT:
+        yybegin(YYINITIAL);
+        return new Symbol(TokenConstants.ERROR, "EOF in comment");
+    case MULT_LINE_COMMENT:
+        yybegin(YYINITIAL);
+        return new Symbol(TokenConstants.ERROR, "EOF in comment");
+    case STRING:
+        yybegin(YYINITIAL);
+        return new Symbol(TokenConstants.ERROR, "EOF in string constant");
     }
     return new Symbol(TokenConstants.EOF);
 %eofval}
@@ -79,7 +90,8 @@ import java_cup.runtime.Symbol;
  * .
  * Hint: You might need additional start conditions. */
 %state LINE_COMMENT
-
+%state MULT_LINE_COMMENT
+%state STRING
 
 /* Define lexical rules after the %% separator.  There is some code
  * provided for you that you may wish to use, but you may change it
@@ -100,10 +112,17 @@ import java_cup.runtime.Symbol;
 <YYINITIAL>\n	 { /* Fill-in here. */ }
 <YYINITIAL>\s+ { /* Fill-in here. */ }
 
-<YYINITIAL>"--"         { /* Fill-in here. */ }
-<LINE_COMMENT>.*        { /* Fill-in here. */ }
-<LINE_COMMENT>\n        { /* Fill-in here. */ }
+<YYINITIAL>"--"             { yybegin(MULT_LINE_COMMENT);}
+<LINE_COMMENT>.*            { ; }
+<LINE_COMMENT>\n            { curr_lineno += 1; }
 
+<YYINITIAL>"(*"             { yybegin(MULT_LINE_COMMENT); comment_open_num += 1; }
+<MULT_LINE_COMMENT>"(*"     { comment_open_num += 1; }
+<MULT_LINE_COMMENT>"*)"     { comment_open_num -= 1;
+                                if(comment_open_num == 0) 
+                                    yybegin(YYINITIAL); }
+<MULT_LINE_COMMENT>\n       { curr_lineno += 1; }
+<MULT_LINE_COMMENT>[^\n]    { ; }
 
 
 
