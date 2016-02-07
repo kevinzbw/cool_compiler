@@ -109,37 +109,49 @@ import java_cup.runtime.Symbol;
  * Reference Manual (CoolAid).  Please be sure to look there. */
 %%
 
-<YYINITIAL>\n	 { /* Fill-in here. */ }
-<YYINITIAL>\s+ { /* Fill-in here. */ }
+<YYINITIAL>\n	            { curr_lineno += 1; }
+<YYINITIAL>\s+              { }
 
 <YYINITIAL>"--"             { yybegin(MULT_LINE_COMMENT);}
-<LINE_COMMENT>.*            { ; }
+<LINE_COMMENT>.*            { }
 <LINE_COMMENT>\n            { curr_lineno += 1; }
 
 <YYINITIAL>"(*"             { yybegin(MULT_LINE_COMMENT); comment_open_num += 1; }
+<YYINITIAL>"*)"             { return new Symbol(TokenConstants.ERROR, "Unmatched *)"); }
 <MULT_LINE_COMMENT>"(*"     { comment_open_num += 1; }
 <MULT_LINE_COMMENT>"*)"     { comment_open_num -= 1;
                                 if(comment_open_num == 0) 
                                     yybegin(YYINITIAL); }
 <MULT_LINE_COMMENT>\n       { curr_lineno += 1; }
-<MULT_LINE_COMMENT>[^\n]    { ; }
+<MULT_LINE_COMMENT>[^\n]    { }
 
+<YYINITIAL>"\""             { string_buf.setLength(0); yybegin(STRING); }
+
+<STRING>"\""                { yybegin(YYINITIAL); 
+                                String str = string_buf.toString();
+                                if(str.length() > MAX_STR_CONST) {
+                                    return new Symbol(TokenConstants.ERROR,
+                                        "String constant too long");
+                                }
+                                return new Symbol(TokenConstants.STR_CONST,
+                                    AbstractTable.stringtable.addString(str)); }
+
+<STRING>[^\\n\t\b\f\x00]+   { string_buf.append(yytext()); }
+<STRING>\x00                { return new Symbol(TokenConstants.ERROR,
+                                "String contains null character"); }
+<STRING>.                   { return new Symbol(TokenConstants.ERROR,
+                                        "Unterminated string constant"); }
 
 
 
 <YYINITIAL>"=>"		{ return new Symbol(TokenConstants.DARROW); }
-
-
+<YYINITIAL>"<-"     { return new Symbol(TokenConstants.ASSIGN); }
 
 
 
 <YYINITIAL>[0-9][0-9]*  { /* Integers */
                           return new Symbol(TokenConstants.INT_CONST,
 					    AbstractTable.inttable.addString(yytext())); }
-
-
-
-
 
 
 <YYINITIAL>[Cc][Aa][Ss][Ee]	{ return new Symbol(TokenConstants.CASE); }
@@ -163,10 +175,6 @@ import java_cup.runtime.Symbol;
 <YYINITIAL>[Ww][Hh][Ii][Ll][Ee] { return new Symbol(TokenConstants.WHILE); }
 
 
-
-
-
-
 <YYINITIAL>"+"			{ return new Symbol(TokenConstants.PLUS); }
 <YYINITIAL>"/"			{ return new Symbol(TokenConstants.DIV); }
 <YYINITIAL>"-"			{ return new Symbol(TokenConstants.MINUS); }
@@ -183,8 +191,6 @@ import java_cup.runtime.Symbol;
 <YYINITIAL>"@"			{ return new Symbol(TokenConstants.AT); }
 <YYINITIAL>"}"			{ return new Symbol(TokenConstants.RBRACE); }
 <YYINITIAL>"{"			{ return new Symbol(TokenConstants.LBRACE); }
-
-
 
 
 .                { /*
