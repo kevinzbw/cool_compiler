@@ -116,22 +116,29 @@ OBJECTID = [a-z_]+[\w]*
  * Reference Manual (CoolAid).  Please be sure to look there. */
 %%
 
+//white characters
 <YYINITIAL>\n                       { curr_lineno += 1; }
-<YYINITIAL>[\s\b\t\r\u000B\u000C]   { }
+<YYINITIAL>[\s\b\t\r\u000B\u000C]   { /* Jlex doesn't support \f \v */ }
 
-<YYINITIAL>\'           {  return new Symbol(TokenConstants.ERROR, "'");}
+//Error charaters for Cool
+<YYINITIAL>"\'"         {  return new Symbol(TokenConstants.ERROR, "'");}
 <YYINITIAL>\>           {  return new Symbol(TokenConstants.ERROR, ">");}
 <YYINITIAL>\[           {  return new Symbol(TokenConstants.ERROR, "[");}
 <YYINITIAL>\]           {  return new Symbol(TokenConstants.ERROR, "]");}
 
+
+//Parsing for the line commnent 
 <YYINITIAL>"--"             { yybegin(LINE_COMMENT); }
 <LINE_COMMENT>[^\n]*        { }
 <LINE_COMMENT>\n            { yybegin(YYINITIAL); curr_lineno += 1; }
 
+
+//Parsing for the block comment
 <YYINITIAL>"(*"             { yybegin(MULT_LINE_COMMENT); comment_open_num += 1; }
 <YYINITIAL>"*)"             { return new Symbol(TokenConstants.ERROR, "Unmatched *)"); }
 <MULT_LINE_COMMENT>"(*"     { comment_open_num += 1; }
-<MULT_LINE_COMMENT>"*)"     { comment_open_num -= 1;
+<MULT_LINE_COMMENT>"*)"     { /* handle unmatched *) */
+                                comment_open_num -= 1;
                                 if(comment_open_num < 0)
                                     return new Symbol(TokenConstants.ERROR, "Unmatched *)");
                                 else if(comment_open_num == 0) 
@@ -139,8 +146,10 @@ OBJECTID = [a-z_]+[\w]*
 <MULT_LINE_COMMENT>\n       { curr_lineno += 1; }
 <MULT_LINE_COMMENT>[^\n]    { }
 
+
+//Parsing for the String
 <YYINITIAL>"\""             { string_buf.setLength(0); yybegin(STRING); }
-<STRING>"\""                { yybegin(YYINITIAL); 
+<STRING>"\""                { yybegin(YYINITIAL);
                                 String str = string_buf.toString();
                                 if(str.length() > MAX_STR_CONST) {
                                     return new Symbol(TokenConstants.ERROR,
@@ -148,7 +157,7 @@ OBJECTID = [a-z_]+[\w]*
                                 }
                                 return new Symbol(TokenConstants.STR_CONST,
                                     AbstractTable.stringtable.addString(str)); }
-
+//Error condition
 <STRING>\n                  { yybegin(YYINITIAL);
                                 curr_lineno += 1;
                                 return new Symbol(TokenConstants.ERROR,
@@ -156,9 +165,9 @@ OBJECTID = [a-z_]+[\w]*
 <STRING>\0                  { yybegin(STRING_NULL);
                                 return new Symbol(TokenConstants.ERROR,
                                 "String contains null character"); }
-
+//Special case \'\n'
 <STRING>\\\n                { string_buf.append("\n"); curr_lineno += 1; }
-
+//Reference to standard lexer
 <STRING>\\.                 {   if (yytext().equals("\\n"))
                                     string_buf = string_buf.append('\n'); 
                                 else if (yytext().equals("\\b"))
@@ -170,9 +179,11 @@ OBJECTID = [a-z_]+[\w]*
                                 else
                                     string_buf = string_buf.append(yytext().charAt(1));
                             }
-
+//Normal characters
 <STRING>[^\"\0\n\\]+        { string_buf.append(yytext()); }
 
+
+//Null characters in string
 <STRING_NULL>\n             { yybegin(YYINITIAL);
                                 curr_lineno += 1;
                                 return new Symbol(TokenConstants.ERROR,
@@ -180,7 +191,7 @@ OBJECTID = [a-z_]+[\w]*
 <STRING_NULL>\"             { yybegin(YYINITIAL); }
 <STRING_NULL>[^\"\n]        { }
 
-
+//More token supported
 <YYINITIAL>"=>"		{ return new Symbol(TokenConstants.DARROW); }
 <YYINITIAL>"<="     { return new Symbol(TokenConstants.LE); }
 <YYINITIAL>"<-"     { return new Symbol(TokenConstants.ASSIGN); }
@@ -212,6 +223,7 @@ OBJECTID = [a-z_]+[\w]*
 <YYINITIAL>[Ww][Hh][Ii][Ll][Ee] { return new Symbol(TokenConstants.WHILE); }
 
 
+//Identifiers for class and var
 <YYINITIAL>{TYPEID}             { return new Symbol(TokenConstants.TYPEID,
                                     AbstractTable.stringtable.addString(yytext())); }
 <YYINITIAL>{OBJECTID}           { return new Symbol(TokenConstants.OBJECTID,
