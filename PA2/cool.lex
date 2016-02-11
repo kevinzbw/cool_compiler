@@ -116,18 +116,17 @@ OBJECTID = [a-z_]+[\w]*
  * Reference Manual (CoolAid).  Please be sure to look there. */
 %%
 
-<YYINITIAL>\n	            { curr_lineno += 1; }
-<YYINITIAL>\s+              { }
-<YYINITIAL>\t+              { }
-<YYINITIAL>\b+              { }
-<YYINITIAL>\f+              { }
-<YYINITIAL>\r+              { }
-<YYINITIAL>\x0b+            { }
+<YYINITIAL>\n                       { curr_lineno += 1; }
+<YYINITIAL>[\s\b\t\r\u000B\u000C]   {}
 
+<YYINITIAL>\'           {  return new Symbol(TokenConstants.ERROR, "'");}
+<YYINITIAL>\>           {  return new Symbol(TokenConstants.ERROR, ">");}
+<YYINITIAL>\[           {  return new Symbol(TokenConstants.ERROR, "[");}
+<YYINITIAL>\]           {  return new Symbol(TokenConstants.ERROR, "]");}
 
 <YYINITIAL>"--"             { yybegin(LINE_COMMENT);}
 <LINE_COMMENT>[^\n]*        { }
-<LINE_COMMENT>\n            { curr_lineno += 1; yybegin(STRING); }
+<LINE_COMMENT>\n            { yybegin(STRING); curr_lineno += 1; }
 
 <YYINITIAL>"(*"             { yybegin(MULT_LINE_COMMENT); comment_open_num += 1; }
 <YYINITIAL>"*)"             { return new Symbol(TokenConstants.ERROR, "Unmatched *)"); }
@@ -156,7 +155,18 @@ OBJECTID = [a-z_]+[\w]*
 <STRING>\0                  { yybegin(STRING_NULL);
                                 return new Symbol(TokenConstants.ERROR,
                                 "String contains null character"); }
-<STRING>\\                  { }
+<STRING>\\.                 {   if (yytext().equals("\\n"))
+                                    string_buf = string_buf.append('\n'); 
+                                else if (yytext().equals("\\b"))
+                                    string_buf = string_buf.append('\b'); 
+                                else if (yytext().equals("\\t"))
+                                    string_buf = string_buf.append('\t'); 
+                                else if (yytext().equals("\\f"))
+                                    string_buf = string_buf.append('\f'); 
+                                else
+                                    string_buf = string_buf.append(yytext().charAt(1));
+                            }
+
 <STRING>[^\"\0\n\\]+        { string_buf.append(yytext()); }
 
 <STRING_NULL>\n             { yybegin(YYINITIAL);
