@@ -1,9 +1,10 @@
 /*
- * CS164: Spring 2004
+ * CS164: Spring 2016
  * Programming Assignment 2
  *
  * The scanner definition for Cool.
  *
+ * @Author: Zhenbang Wang
  */
 
 import java_cup.runtime.Symbol;
@@ -77,6 +78,9 @@ import java_cup.runtime.Symbol;
     case STRING:
         yybegin(YYINITIAL);
         return new Symbol(TokenConstants.ERROR, "EOF in string constant");
+    case STRING_NULL:
+        yybegin(YYINITIAL);
+        return new Symbol(TokenConstants.ERROR, "EOF in string constant");
     }
     return new Symbol(TokenConstants.EOF);
 %eofval}
@@ -85,6 +89,8 @@ import java_cup.runtime.Symbol;
 %class CoolLexer
 %cup
 
+TYPEID = [A-Z][A-Za-z0-9_]*
+OBJECTID = [a-z_]+[\w]*
 
 /* This defines a new start condition for line comments.
  * .
@@ -92,6 +98,7 @@ import java_cup.runtime.Symbol;
 %state LINE_COMMENT
 %state MULT_LINE_COMMENT
 %state STRING
+%state STRING_NULL
 
 /* Define lexical rules after the %% separator.  There is some code
  * provided for you that you may wish to use, but you may change it
@@ -111,22 +118,29 @@ import java_cup.runtime.Symbol;
 
 <YYINITIAL>\n	            { curr_lineno += 1; }
 <YYINITIAL>\s+              { }
+<YYINITIAL>\t+              { }
+<YYINITIAL>\b+              { }
+<YYINITIAL>\f+              { }
+<YYINITIAL>\r+              { }
+<YYINITIAL>\x0b+            { }
 
-<YYINITIAL>"--"             { yybegin(MULT_LINE_COMMENT);}
-<LINE_COMMENT>.*            { }
-<LINE_COMMENT>\n            { curr_lineno += 1; }
+
+<YYINITIAL>"--"             { yybegin(LINE_COMMENT);}
+<LINE_COMMENT>[^\n]*        { }
+<LINE_COMMENT>\n            { curr_lineno += 1; yybegin(STRING); }
 
 <YYINITIAL>"(*"             { yybegin(MULT_LINE_COMMENT); comment_open_num += 1; }
 <YYINITIAL>"*)"             { return new Symbol(TokenConstants.ERROR, "Unmatched *)"); }
 <MULT_LINE_COMMENT>"(*"     { comment_open_num += 1; }
 <MULT_LINE_COMMENT>"*)"     { comment_open_num -= 1;
-                                if(comment_open_num == 0) 
+                                if(comment_open_num < 0)
+                                    return new Symbol(TokenConstants.ERROR, "Unmatched *)");
+                                else if(comment_open_num == 0) 
                                     yybegin(YYINITIAL); }
 <MULT_LINE_COMMENT>\n       { curr_lineno += 1; }
 <MULT_LINE_COMMENT>[^\n]    { }
 
 <YYINITIAL>"\""             { string_buf.setLength(0); yybegin(STRING); }
-
 <STRING>"\""                { yybegin(YYINITIAL); 
                                 String str = string_buf.toString();
                                 if(str.length() > MAX_STR_CONST) {
@@ -135,18 +149,27 @@ import java_cup.runtime.Symbol;
                                 }
                                 return new Symbol(TokenConstants.STR_CONST,
                                     AbstractTable.stringtable.addString(str)); }
-
-<STRING>[^\\n\t\b\f\x00]+   { string_buf.append(yytext()); }
-<STRING>\x00                { return new Symbol(TokenConstants.ERROR,
-                                "String contains null character"); }
-<STRING>.                   { return new Symbol(TokenConstants.ERROR,
+<STRING>\n                  { yybegin(YYINITIAL);
+                                curr_lineno += 1;
+                                return new Symbol(TokenConstants.ERROR,
                                         "Unterminated string constant"); }
+<STRING>\0                  { yybegin(STRING_NULL);
+                                return new Symbol(TokenConstants.ERROR,
+                                "String contains null character"); }
+<STRING>\\                  { }
+<STRING>[^\"\0\n\\]+        { string_buf.append(yytext()); }
 
+<STRING_NULL>\n             { yybegin(YYINITIAL);
+                                curr_lineno += 1;
+                                return new Symbol(TokenConstants.ERROR,
+                                        "Unterminated string constant"); }
+<STRING_NULL>\"             { yybegin(YYINITIAL); }
+<STRING_NULL>[^\"\n]        { }
 
 
 <YYINITIAL>"=>"		{ return new Symbol(TokenConstants.DARROW); }
+<YYINITIAL>"<="     { return new Symbol(TokenConstants.LE); }
 <YYINITIAL>"<-"     { return new Symbol(TokenConstants.ASSIGN); }
-
 
 
 <YYINITIAL>[0-9][0-9]*  { /* Integers */
@@ -173,6 +196,12 @@ import java_cup.runtime.Symbol;
 <YYINITIAL>[Tt][Hh][Ee][Nn]   	{ return new Symbol(TokenConstants.THEN); }
 <YYINITIAL>t[Rr][Uu][Ee]	{ return new Symbol(TokenConstants.BOOL_CONST, Boolean.TRUE); }
 <YYINITIAL>[Ww][Hh][Ii][Ll][Ee] { return new Symbol(TokenConstants.WHILE); }
+
+
+<YYINITIAL>{TYPEID}             { return new Symbol(TokenConstants.TYPEID,
+                                    AbstractTable.stringtable.addString(yytext())); }
+<YYINITIAL>{OBJECTID}           { return new Symbol(TokenConstants.OBJECTID,
+                                    AbstractTable.stringtable.addString(yytext())); }
 
 
 <YYINITIAL>"+"			{ return new Symbol(TokenConstants.PLUS); }
