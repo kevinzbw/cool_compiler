@@ -117,16 +117,16 @@ OBJECTID = [a-z_]+[\w]*
 %%
 
 <YYINITIAL>\n                       { curr_lineno += 1; }
-<YYINITIAL>[\s\b\t\r\u000B\u000C]   {}
+<YYINITIAL>[\s\b\t\r\u000B\u000C]   { }
 
 <YYINITIAL>\'           {  return new Symbol(TokenConstants.ERROR, "'");}
 <YYINITIAL>\>           {  return new Symbol(TokenConstants.ERROR, ">");}
 <YYINITIAL>\[           {  return new Symbol(TokenConstants.ERROR, "[");}
 <YYINITIAL>\]           {  return new Symbol(TokenConstants.ERROR, "]");}
 
-<YYINITIAL>"--"             { yybegin(LINE_COMMENT);}
+<YYINITIAL>"--"             { yybegin(LINE_COMMENT); }
 <LINE_COMMENT>[^\n]*        { }
-<LINE_COMMENT>\n            { yybegin(STRING); curr_lineno += 1; }
+<LINE_COMMENT>\n            { yybegin(YYINITIAL); curr_lineno += 1; }
 
 <YYINITIAL>"(*"             { yybegin(MULT_LINE_COMMENT); comment_open_num += 1; }
 <YYINITIAL>"*)"             { return new Symbol(TokenConstants.ERROR, "Unmatched *)"); }
@@ -148,6 +148,7 @@ OBJECTID = [a-z_]+[\w]*
                                 }
                                 return new Symbol(TokenConstants.STR_CONST,
                                     AbstractTable.stringtable.addString(str)); }
+
 <STRING>\n                  { yybegin(YYINITIAL);
                                 curr_lineno += 1;
                                 return new Symbol(TokenConstants.ERROR,
@@ -155,6 +156,9 @@ OBJECTID = [a-z_]+[\w]*
 <STRING>\0                  { yybegin(STRING_NULL);
                                 return new Symbol(TokenConstants.ERROR,
                                 "String contains null character"); }
+
+<STRING>\\\n                { string_buf.append("\n"); curr_lineno += 1; }
+
 <STRING>\\.                 {   if (yytext().equals("\\n"))
                                     string_buf = string_buf.append('\n'); 
                                 else if (yytext().equals("\\b"))
