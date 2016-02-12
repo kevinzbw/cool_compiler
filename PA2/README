@@ -145,3 +145,16 @@ Instructions
 Write-up for PA2
 ----------------
 
+Comment
+Our implement of laxer doesn’t use regular expression to process the comment.
+Instead, we use a status(multi_line_comment) to ensure that the laxer won’t make mistake when it encounters some special cases like “(*random*)random(*random*)”. Of course, we keep track the number of open parentheses of comment” (* ”. We also handle a bunch of tricky inputs and make it work well with comment.
+
+String
+String has a lot problems needed to be solved. The first one is that the lexer doesn’t accept some special strings. For example, “\n”, EOF, “\’\n’”\, etc. We also use a status to make sure all the conditions work well. There is another status(string_null) to handle the null charachter.
+
+ID
+We implemented the ObjectID and Class ID by using regular expression.
+
+Exception
+We noticed that there are a few characters that are not supported by lexer including ” ‘ [ ] >  ”. We make an exception for them. Also, there are many cases of errors will occur with every status. We handle them gracefully.
+
