@@ -163,3 +163,46 @@ Instructions
 
 Write-up for PA3
 ----------------
+
+Design decisions
+
+1. We use 'list', 'cases' to handle features, formals, and other definitions which is complicated.
+   By using this, we can make the program much easier.
+
+i.e.
+formal
+	::= OBJECTID:o COLON TYPEID:t
+		{: RESULT = new formalc(curr_lineno(),o,t); :}
+	;
+
+formal_list
+	::= formal:f 
+		{: RESULT = (new Formals(curr_lineno())).appendElement(f); :}
+	| formal_list:fl COMMA formal:f
+		{: RESULT = fl.appendElement(f); :}
+	;
+
+formals
+	::= LPAREN RPAREN
+		{: RESULT = new Formals(curr_lineno()); :}
+	| LPAREN formal_list:fl RPAREN
+		{: RESULT = fl; :}
+	;
+
+2. We give the right precedence to handle the conflict
+
+precedence left LET_STMT;
+precedence right ASSIGN;
+precedence left NOT;
+precedence nonassoc LE, LT, EQ;
+precedence left MINUS, PLUS;
+precedence left MULT, DIV;
+precedence left ISVOID;
+precedence left NEG;
+precedence left AT;
+precedence left DOT;
+
+3. We handle the let ambiguity by introducing the highest precedence of LET_STMT.
+   Then we use the Contextual Precedence to make sure that we can match the expersions as right as possible.
+
+4. We carfully follow the Manual of Cool and the PA3 specification to put all the language in our program.
