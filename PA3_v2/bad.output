@@ -1,0 +1,15 @@
+"bad.cl", line 15: parse error at or near OBJECTID = b
+"bad.cl", line 19: parse error at or near OBJECTID = a
+"bad.cl", line 23: parse error at or near OBJECTID = inherts
+"bad.cl", line 28: parse error at or near ';'
+"bad.cl", line 35: parse error at or near TYPEID = N
+"bad.cl", line 41: parse error at or near TYPEID = NUM
+"bad.cl", line 46: parse error at or near TYPEID = NUM
+"bad.cl", line 52: parse error at or near TYPEID = BOOL
+"bad.cl", line 57: parse error at or near TYPEID = BOOL
+"bad.cl", line 64: parse error at or near '}'
+"bad.cl", line 81: parse error at or near TYPEID = Error
+"bad.cl", line 87: parse error at or near ASSIGN
+"bad.cl", line 87: parse error at or near ')'
+"bad.cl", line 93: parse error at or near CASE
+"bad.cl", line 101: parse error at or near '}'
