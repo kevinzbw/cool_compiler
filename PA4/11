@@ -1,0 +1,108 @@
+#20
+_program
+  #8
+  _class
+    A
+    Object
+    "good3.test"
+    (
+    #4
+    _method
+      foo
+      #2
+      _formal
+        a
+        Int
+      #2
+      _formal
+        b
+        B
+      #2
+      _formal
+        c
+        A
+      #2
+      _formal
+        d
+        B
+      SELF_TYPE
+      #4
+      _object
+        self
+      : SELF_TYPE
+    )
+  #16
+  _class
+    B
+    A
+    "good3.test"
+    (
+    #13
+    _method
+      moo
+      SELF_TYPE
+      #13
+      _let
+        b
+        C
+        #11
+        _new
+          C
+        : C
+        #13
+        _dispatch
+          #13
+          _object
+            self
+          : SELF_TYPE
+          foo
+          (
+          #12
+          _int
+            4
+          : Int
+          #12
+          _object
+            b
+          : C
+          #12
+          _object
+            b
+          : C
+          #12
+          _object
+            b
+          : C
+          )
+        : B
+      : B
+    )
+  #20
+  _class
+    C
+    B
+    "good3.test"
+    (
+    #18
+    _attr
+      foo
+      Int
+      #18
+      _no_expr
+      : _no_type
+    )
+  #20
+  _class
+    Main
+    Object
+    "good3.test"
+    (
+    #20
+    _method
+      main
+      Int
+      #20
+      _int
+        6
+      : Int
+    )

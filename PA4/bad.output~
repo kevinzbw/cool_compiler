@@ -1,0 +1,4 @@
+bad.cl:16: In call of method init, type Int of parameter y does not conform to declared typeBool.
+bad.cl:17: Method init invoked with wrong number of arguments.
+bad.cl:18: Dispatch to undefined method iinit.
+Compilation halted due to static semantic errors.
