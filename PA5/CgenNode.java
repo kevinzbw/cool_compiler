@@ -21,6 +21,8 @@ PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 // This is a project skeleton file
 
+import javafx.util.Pair;
+
 import java.io.PrintStream;
 import java.util.Vector;
 import java.util.Enumeration;
@@ -77,8 +79,9 @@ class CgenNode extends class_c {
         this.basic_status = basic_status;
         AbstractTable.stringtable.addString(name.getString());
 
-        methodOffset = new HashMap<AbstractSymbol, Integer>();
-        attrOffset = new HashMap<AbstractSymbol, Integer>();
+        this.methodTab = new Vector();
+        this.attrTab = new Vector();
+        this.nameToClassMap = new HashMap();
     }
 
     void addChild(CgenNode child) {
@@ -128,13 +131,78 @@ class CgenNode extends class_c {
         return basic_status == Basic;
     }
 
+
+
+
+
+    /** Dispatch System
+     *
+     *
+     *
+     *
+     * Feature Table for the class */
+    private Vector<AbstractSymbol>  methodTab;
+    private HashMap<AbstractSymbol,AbstractSymbol> nameToClassMap;
+    private Vector<attr> attrTab;
+
+
+    public void constructFeatureTabs(){
+        this.methodTab = parent.cloneMethodTab();
+        this.nameToClassMap = parent.cloneNameToClassMap();
+        this.attrTab = parent.cloneAttrTab();
+        for (Enumeration e = this.features.getElements(); e.hasMoreElements(); ){
+            Feature f = (Feature) e.nextElement();
+
+            if (f.getClass()== (new attr(0,null,null,null)).getClass()) {
+                /** e is Attr */
+                attrTab.addElement((attr)f);
+            }else{
+                /** e is Method */
+                if ( isOverrideMethod(((method)f).getName()) ){
+                    /** Override */
+                    this.nameToClassMap.put(((method) f).getName(),this.getName());
+                }else{
+                    /** New method */
+                    this.nameToClassMap.put(((method) f).getName(),this.getName());
+                    this.methodTab.addElement(((method) f).getName());
+                }
+            }
+        }
+    }
+
+    /** Check if the cloned parent method table has the method */
+    private Boolean isOverrideMethod(AbstractSymbol methodName){
+        return this.methodTab.contains(methodName);
+    }
+
+    private Vector<AbstractSymbol> cloneMethodTab(){
+        return (Vector<AbstractSymbol>) this.methodTab.clone();
+    }
+
+    private HashMap<AbstractSymbol,AbstractSymbol> cloneNameToClassMap(){
+        return (HashMap<AbstractSymbol,AbstractSymbol>) this.nameToClassMap.clone();
+    }
+
+    private Vector<attr> cloneAttrTab(){
+        return (Vector<attr>) this.attrTab.clone();
+    }
+
+    public Enumeration getMethodElement(){
+        return this.methodTab.elements();
+    }
+
+    public AbstractSymbol getMethodClassPrefix(AbstractSymbol methodname){
+        return this.nameToClassMap.get(methodname);
+    }
+
     /**
      * Get the method offset
      *
      * @return offset
      */
+
     Integer getMethodOffset(AbstractSymbol method) {
-        return methodOffset.get(method);
+        return this.methodTab.indexOf(method);
     }
 
     /**
@@ -143,6 +211,21 @@ class CgenNode extends class_c {
      * @return offset
      */
     Integer getAttrOffset(AbstractSymbol attr) {
-        return attrOffset.get(attr);
+        return this.attrTab.indexOf(attr);
     }
+
+    /** Get the class Tag */
+    public int getTag( Vector nds){
+        return nds.indexOf(this);
+    }
+
+    public int getAttrTabSize(){
+        return this.attrTab.size();
+    }
+
+    public Enumeration getAttrElement(){
+        return this.attrTab.elements();
+    }
+
+
 }

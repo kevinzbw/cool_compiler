@@ -528,6 +528,10 @@ class method extends Feature {
         expr.dump_with_types(out, n + 2);
     }
 
+    /*** Add to kevin's code ***/
+    public AbstractSymbol getName(){
+        return this.name;
+    }
 }
 
 
@@ -574,6 +578,11 @@ class attr extends Feature {
         dump_AbstractSymbol(out, n + 2, name);
         dump_AbstractSymbol(out, n + 2, type_decl);
         init.dump_with_types(out, n + 2);
+    }
+
+    /*** Add to Kevin's Code ***/
+    public AbstractSymbol getName(){
+        return this.name;
     }
 
 }

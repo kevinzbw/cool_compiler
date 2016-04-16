@@ -22,6 +22,8 @@ PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 // This is a project skeleton file
 
 import java.io.PrintStream;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /** This class aggregates all kinds of support routines and constants
     for the code generator; all routines are statics, so no instance of
@@ -119,9 +121,13 @@ class CgenSupport {
 
     //Call Object.copy
     final static String OBJECT_COPY = "Object.copy";
+    final static String DISPATCH_ABORT = "_dispatch_abort";
 
     //Label number
     static int CURRENT_LABEL_NUMBER = 0;
+
+    //Current cgenNode
+    static CgenNode currCgenNode;
 
     /** Emits an LW instruction.
      * @param dest_reg the destination register
@@ -625,6 +631,88 @@ class CgenSupport {
     static void emitStoreIntBoolObjVal(String dest_reg, String source_reg, PrintStream s) {
         emitStore(dest_reg, 3, source_reg, s);
     }
+
+    /** Emits Label*/
+    static void emitClassNameTabLabel(PrintStream s){
+        s.print(CLASSNAMETAB+LABEL);
+    }
+
+    /** Emits Label*/
+    static void emitClassObjTabLabel(PrintStream s){
+        s.print(CLASSOBJTAB+LABEL);
+    }
+
+    /** Emits a single tag -> name row for class_nameTab*/
+    static void emitClassNameTabBlock(PrintStream s, CgenNode cn){
+        s.print(WORD);
+        ((StringSymbol)cn.getName()).codeRef(s);
+        s.println("");
+    }
+
+    /** Emits a single tag -> proto_obj
+     *                     -> init_method
+     * row for class_nameTab*/
+    static void emitClassObjTabBlock(PrintStream s, CgenNode cn){
+        s.print(WORD);
+        s.println(cn.getName()+PROTOBJ_SUFFIX);
+        s.print(WORD);
+        s.println(cn.getName()+CLASSINIT_SUFFIX);
+    }
+
+
+    static void emitDispTabForSingleClass(PrintStream s,CgenNode cn){
+        s.print(cn.getName()+DISPTAB_SUFFIX+LABEL);
+        for(Enumeration e = cn.getMethodElement(); e.hasMoreElements(); ){
+            AbstractSymbol methodName = (AbstractSymbol) e.nextElement();
+            s.println(WORD+cn.getMethodClassPrefix(methodName)+ METHOD_SEP +methodName);
+        }
+    }
+
+    static void emitProtObjForSingleClass(PrintStream s,CgenNode cn,CgenClassTable cgenClassTable){
+
+        // Garbeg Collector
+        s.println(WORD+"-1");
+
+        emitProtObjRef(cn.getName(),s);
+        s.println("");
+
+        // .word classTag
+        s.println( WORD+cn.getTag(cgenClassTable.getTable()) );
+
+        // .word objSize
+        s.println(WORD+(cn.getAttrTabSize()+3));
+
+        // .word dispTab
+        s.print(WORD);
+        emitDispTableRef(cn.getName(),s);
+
+        // AttrBlock
+        emitAttrBlock(s,cn);
+
+    }
+
+    static void emitAttrBlock(PrintStream s, CgenNode cn){
+        for(Enumeration e = cn.getAttrElement(); e.hasMoreElements(); ) {
+            attr a = (attr) e.nextElement();
+            s.println(WORD);
+            emitAttrInit(s,a);
+            s.println("");
+        }
+    }
+
+    static  void emitAttrInit(PrintStream s, attr a, CgenClassTable cgenClassTable){
+        if (! cgenClassTable.isPremitive(a.type_decl)){
+            /** NOT premitive type */
+            s.print("0");
+        }else{
+            if a.type_decl.equals(TreeConstants.Str) s.print(AbstractSymbol.str);
+            if a.type_decl.equals(TreeConstants.Bool) s.print();
+            if a.type_decl.equals(TreeConstants.Int) s.print();
+        }
+    }
+
+
+
 }
     
     

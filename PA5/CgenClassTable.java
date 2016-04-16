@@ -430,6 +430,26 @@ class CgenClassTable extends SymbolTable {
         parent.addChild(nd);
     }
 
+    public void codeClassNameTab(){
+        CgenSupport.emitClassNameTabLabel(str);
+        for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
+            CgenSupport.emitClassNameTabBlock(str,(CgenNode)e.nextElement());
+        }
+    }
+
+    public void codeClassObjTab(){
+        CgenSupport.emitClassObjTabLabel(str);
+        for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
+            CgenSupport.emitClassObjTabBlock(str,(CgenNode)e.nextElement());
+        }
+    }
+
+    public void codeDispTab(){
+        for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
+            CgenSupport.emitDispTabForSingleClass(str,(CgenNode)e.nextElement());
+        }
+    }
+
     /**
      * Constructs a new class table and invokes the code generator
      */
@@ -438,9 +458,9 @@ class CgenClassTable extends SymbolTable {
 
         this.str = str;
 
-        intclasstag = 3 /* Change to your Int class tag here */;
-        boolclasstag = 4 /* Change to your Bool class tag here */;
-        stringclasstag = 5/* Change to your String class tag here */;
+        intclasstag = 3  /* Change to your Int class tag here */;
+        boolclasstag = 4  /* Change to your Bool class tag here */;
+        stringclasstag = 5 /* Change to your String class tag here */;
 
         enterScope();
         if (Flags.cgen_debug) System.out.println("Building CgenClassTable");
@@ -467,6 +487,10 @@ class CgenClassTable extends SymbolTable {
          * */
         buildInheritanceTree();
 
+        /** Construct FeatrueTabs for every tree nod
+         */
+        constructFeaturesTabsFromRoots();
+
         /** From here we got the nds of all CgenNode which is identical to all classes (except helper classes)
          * with the right relationship in each CgenNode */
 
@@ -474,6 +498,8 @@ class CgenClassTable extends SymbolTable {
 
         exitScope();
     }
+
+
 
     /**
      * This method is the meat of the code generator.  It is to be
@@ -488,11 +514,25 @@ class CgenClassTable extends SymbolTable {
 
         if (Flags.cgen_debug) System.out.println("coding constants");
         codeConstants();
-
         //                 Add your code to emit
         //                   - prototype objects
         //                   - class_nameTab
         //                   - dispatch tables
+        /** Emit class_nameTab */
+        if (Flags.cgen_debug) System.out.println("coding class_nameTab");
+        codeClassNameTab();
+
+        /** Emit class_objTab */
+        if (Flags.cgen_debug) System.out.println("coding class_objTab");
+        codeClassObjTab();
+
+        /** Emit _dispTab for all classes */
+        if (Flags.cgen_debug) System.out.println("coding _dispTab");
+        codeDispTab();
+
+        /** Emit protoObj for all classes */
+        if (Flags.cgen_debug) System.out.println("coding_protoObj");
+        codeProtObj();
 
         if (Flags.cgen_debug) System.out.println("coding global text");
         codeGlobalText();
@@ -504,10 +544,49 @@ class CgenClassTable extends SymbolTable {
     }
 
     /**
+     * Code ProtObj for all classes
+     */
+    public void codeProtObj(){
+        for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
+            CgenSupport.emitProtObjForSingleClass(str,(CgenNode)e.nextElement(),this);
+        }
+    }
+
+    /**
      * Gets the root of the inheritance tree
      */
-    public CgenNode root() {
+    private CgenNode root() {
         return (CgenNode) probe(TreeConstants.Object_);
+    }
+
+    /**
+     * constructor
+     */
+    private void constructFeaturesTabsFromRoots(){
+        constructFeatureTabs(this.root());
+    }
+
+    /**
+     * Construct featureTabs in each cgenNode
+     */
+    private void constructFeatureTabs(CgenNode cn){
+        cn.constructFeatureTabs();
+        for(Enumeration e = cn.getChildren(); e.hasMoreElements(); ){
+            constructFeatureTabs((CgenNode) e.nextElement());
+        }
+    }
+
+    public Vector getTable(){
+        return this.nds;
+    }
+
+    public Boolean isPremitive(AbstractSymbol typename){
+        int i = ((CgenNode)this.lookup(typename)).getTag(nds);
+        return (i==this.stringclasstag)||(i==this.boolclasstag)||(i==this.intclasstag);
+    }
+
+    public int getTag(CgenNode cn){
+        return this.nds.indexOf(cn);
     }
 
 }
