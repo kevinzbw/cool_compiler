@@ -21,8 +21,6 @@ PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 // This is a project skeleton file
 
-import javafx.util.Pair;
-
 import java.io.PrintStream;
 import java.util.Vector;
 import java.util.Enumeration;
@@ -132,66 +130,79 @@ class CgenNode extends class_c {
     }
 
 
-
-
-
-    /** Dispatch System
-     *
-     *
-     *
-     *
-     * Feature Table for the class */
-    private Vector<AbstractSymbol>  methodTab;
-    private HashMap<AbstractSymbol,AbstractSymbol> nameToClassMap;
+    /**
+     * Dispatch System
+     * <p>
+     * <p>
+     * <p>
+     * <p>
+     * Feature Table for the class
+     */
+    private Vector<method> methodTab;
+    private HashMap<method, AbstractSymbol> nameToClassMap;
     private Vector<attr> attrTab;
+    private Vector<AbstractSymbol> currParam;
 
+    public Boolean isParam(AbstractSymbol name) {
+        return this.currParam.contains(name);
+    }
 
-    public void constructFeatureTabs(){
+    public int getParamOffset(AbstractSymbol name) {
+        return this.currParam.indexOf(name);
+    }
+
+    public int getParamSize() {
+        return this.currParam.size();
+    }
+
+    public void constructFeatureTabs() {
         this.methodTab = parent.cloneMethodTab();
         this.nameToClassMap = parent.cloneNameToClassMap();
         this.attrTab = parent.cloneAttrTab();
-        for (Enumeration e = this.features.getElements(); e.hasMoreElements(); ){
+        for (Enumeration e = this.features.getElements(); e.hasMoreElements(); ) {
             Feature f = (Feature) e.nextElement();
 
-            if (f.getClass()== (new attr(0,null,null,null)).getClass()) {
+            if (f.getClass() == (new attr(0, null, null, null)).getClass()) {
                 /** e is Attr */
-                attrTab.addElement((attr)f);
-            }else{
+                attrTab.addElement((attr) f);
+            } else {
                 /** e is Method */
-                if ( isOverrideMethod(((method)f).getName()) ){
+                if (isOverrideMethod(((method) f).getName())) {
                     /** Override */
-                    this.nameToClassMap.put(((method) f).getName(),this.getName());
-                }else{
+                    this.nameToClassMap.put((method) f, this.getName());
+                } else {
                     /** New method */
-                    this.nameToClassMap.put(((method) f).getName(),this.getName());
-                    this.methodTab.addElement(((method) f).getName());
+                    this.nameToClassMap.put((method) f, this.getName());
+                    this.methodTab.addElement((method) f);
                 }
             }
         }
     }
 
-    /** Check if the cloned parent method table has the method */
-    private Boolean isOverrideMethod(AbstractSymbol methodName){
+    /**
+     * Check if the cloned parent method table has the method
+     */
+    private Boolean isOverrideMethod(AbstractSymbol methodName) {
         return this.methodTab.contains(methodName);
     }
 
-    private Vector<AbstractSymbol> cloneMethodTab(){
-        return (Vector<AbstractSymbol>) this.methodTab.clone();
+    private Vector cloneMethodTab() {
+        return (Vector) this.methodTab.clone();
     }
 
-    private HashMap<AbstractSymbol,AbstractSymbol> cloneNameToClassMap(){
-        return (HashMap<AbstractSymbol,AbstractSymbol>) this.nameToClassMap.clone();
+    private HashMap cloneNameToClassMap() {
+        return (HashMap) this.nameToClassMap.clone();
     }
 
-    private Vector<attr> cloneAttrTab(){
+    private Vector<attr> cloneAttrTab() {
         return (Vector<attr>) this.attrTab.clone();
     }
 
-    public Enumeration getMethodElement(){
+    public Enumeration getMethodElement() {
         return this.methodTab.elements();
     }
 
-    public AbstractSymbol getMethodClassPrefix(AbstractSymbol methodname){
+    public AbstractSymbol getMethodClassPrefix(AbstractSymbol methodname) {
         return this.nameToClassMap.get(methodname);
     }
 
@@ -214,16 +225,18 @@ class CgenNode extends class_c {
         return this.attrTab.indexOf(attr);
     }
 
-    /** Get the class Tag */
-    public int getTag( Vector nds){
+    /**
+     * Get the class Tag
+     */
+    public int getTag(Vector nds) {
         return nds.indexOf(this);
     }
 
-    public int getAttrTabSize(){
+    public int getAttrTabSize() {
         return this.attrTab.size();
     }
 
-    public Enumeration getAttrElement(){
+    public Enumeration getAttrElement() {
         return this.attrTab.elements();
     }
 

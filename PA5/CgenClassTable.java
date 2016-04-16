@@ -541,6 +541,18 @@ class CgenClassTable extends SymbolTable {
         //                   - object initializer
         //                   - the class methods
         //                   - etc...
+
+        if (Flags.cgen_debug) System.out.println("coding class initalizer");
+        codeClassInitalizer();
+    }
+
+    /**
+     * Code class initalizer
+     */
+    public void codeClassInitalizer(){
+        for(Enumeration e= nds.elements(); e.hasMoreElements(); ){
+            CgenSupport.emitClassInitializer(str,(CgenNode)e.nextElement(),this);
+        }
     }
 
     /**
@@ -588,6 +600,7 @@ class CgenClassTable extends SymbolTable {
     public int getTag(CgenNode cn){
         return this.nds.indexOf(cn);
     }
+
 
 }
 
