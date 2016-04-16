@@ -3,14 +3,17 @@ class A {
 		1
 	};
 	foo(h: Int):SELF_TYPE {
-		self
+		{
+		h + 1;
+		self;
+		}
 	};
 };
 
 class Main inherits IO {
   b : Int;
-  a:A;
+  a:A <- new A;
   main():Object {
-    new A
+    a.foo(1)
   };
 };
