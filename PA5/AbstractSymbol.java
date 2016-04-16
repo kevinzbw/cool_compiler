@@ -101,9 +101,7 @@ abstract class AbstractSymbol {
     }
 
     /** Returns a printable representation of this symbol. */
-    public String toString() {
-	return str;
-    }
+    public String toString() { return str; }
 
     /** Returns a copy of this symbol */
     public abstract Object clone();
