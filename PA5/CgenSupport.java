@@ -122,7 +122,6 @@ class CgenSupport {
     //Call Object.copy
     final static String OBJECT_COPY = "Object.copy";
     final static String DISPATCH_ABORT = "_dispatch_abort";
-    final static String DISPATCH_ABORT = "_dispatch_abort";
     final static String FILENAME = "str_const0";
 
     //Label number
@@ -694,23 +693,23 @@ class CgenSupport {
     }
 
     static void emitAttrBlock(PrintStream s, CgenNode cn){
-        for(Enumeration e = cn.getAttrElement(); e.hasMoreElements(); ) {
-            attr a = (attr) e.nextElement();
-            s.println(WORD);
-            emitAttrInit(s,a);
-            s.println("");
-        }
+//        for(Enumeration e = cn.getAttrElement(); e.hasMoreElements(); ) {
+//            attr a = (attr) e.nextElement();
+//            s.println(WORD);
+//            emitAttrInit(s,a);
+//            s.println("");
+//        }
     }
 
     static  void emitAttrInit(PrintStream s, attr a, CgenClassTable cgenClassTable){
-        if (! cgenClassTable.isPremitive(a.type_decl)){
-            /** NOT premitive type */
-            s.print("0");
-        }else{
-            if a.type_decl.equals(TreeConstants.Str) s.print(AbstractSymbol.str);
-            if a.type_decl.equals(TreeConstants.Bool) s.print();
-            if a.type_decl.equals(TreeConstants.Int) s.print();
-        }
+//        if (! cgenClassTable.isPremitive(a.type_decl)){
+//            /** NOT premitive type */
+//            s.print("0");
+//        }else{
+//            if a.type_decl.equals(TreeConstants.Str) s.print(AbstractSymbol.str);
+//            if a.type_decl.equals(TreeConstants.Bool) s.print();
+//            if a.type_decl.equals(TreeConstants.Int) s.print();
+//        }
     }
 
 

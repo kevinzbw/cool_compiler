@@ -21,9 +21,6 @@ PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 // This is a project skeleton file
 
-import javafx.util.Pair;
-
-import java.io.PrintStream;
 import java.util.Vector;
 import java.util.Enumeration;
 import java.util.Map;
