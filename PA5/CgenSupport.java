@@ -119,6 +119,8 @@ class CgenSupport {
 
     //Call Object.copy
     final static String OBJECT_COPY = "Object.copy";
+    final static String DISPATCH_ABORT = "_dispatch_abort";
+    final static String FILENAME = "str_const0";
 
     //Label number
     static int CURRENT_LABEL_NUMBER = 0;
