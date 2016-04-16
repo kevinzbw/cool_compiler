@@ -9,8 +9,8 @@ class A {
 
 class Main inherits IO {
   b : Int;
-  a:A <- new A;
+  a:A;
   main():Object {
-    a.foo(1)
+    new A
   };
 };

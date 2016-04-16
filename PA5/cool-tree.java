@@ -879,8 +879,8 @@ class dispatch extends Expression {
         // TODO: 4/15/16 Only handle attr
         // TODO: 4/15/16 need to solve parameters
 
-        CgenNode c1 = CgenNode.getCurrClass();
-        int attrOffset = c1.getAttrOffset();
+        CgenNode c1 = null; //CgenNode.getCurrClass();
+        int attrOffset = 0; //c1.getAttrOffset();
 
         CgenSupport.emitLoad(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
 
@@ -1023,7 +1023,6 @@ class cond extends Expression {
         CgenSupport.emitLabelDef(ifTrueLabel, s);
         then_exp.code(s, classTable);
         CgenSupport.emitLabelDef(ifEndLabel, s);
-
         CgenSupport.emitComment("Finish cond", s);
     }
 
@@ -2145,6 +2144,11 @@ class new_ extends Expression {
      * @param classTable
      */
     public void code(PrintStream s, CgenClassTable classTable) {
+        CgenSupport.emitComment("Start new", s);
+        CgenSupport.emitLoadAddress(CgenSupport.ACC, this.type_name + CgenSupport.PROTOBJ_SUFFIX, s);
+        CgenSupport.emitJal(CgenSupport.OBJECT_COPY, s);
+        CgenSupport.emitJal(this.type_name + CgenSupport.CLASSINIT_SUFFIX, s);
+        CgenSupport.emitComment("Finish new", s);
     }
 
 
