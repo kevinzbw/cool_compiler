@@ -528,8 +528,10 @@ class method extends Feature {
         expr.dump_with_types(out, n + 2);
     }
 
-    /*** Add to kevin's code ***/
-    public AbstractSymbol getName(){
+    /***
+     * Add to kevin's code
+     ***/
+    public AbstractSymbol getName() {
         return this.name;
     }
 }
@@ -580,8 +582,10 @@ class attr extends Feature {
         init.dump_with_types(out, n + 2);
     }
 
-    /*** Add to Kevin's Code ***/
-    public AbstractSymbol getName(){
+    /***
+     * Add to Kevin's Code
+     ***/
+    public AbstractSymbol getName() {
         return this.name;
     }
 
@@ -810,6 +814,37 @@ class static_dispatch extends Expression {
      * @param classTable
      */
     public void code(PrintStream s, CgenClassTable classTable) {
+        AbstractSymbol exprType = this.type_name;
+
+        // TODO: 4/15/16 let
+        CgenSupport.emitComment("Begin dispatch" + exprType + "." + this.name, s);
+
+        for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
+            Expression arg = (Expression) en.nextElement();
+            CgenSupport.emitComment("Evaluate and push" + arg.get_type(), s);
+            arg.code(s, classTable);
+            CgenSupport.emitPush(CgenSupport.ACC, s);
+            CgenSupport.emitComment("Done" + arg.get_type(), s);
+        }
+
+        expr.code(s, classTable);
+
+        int labelValidDispatch = CgenSupport.getNewLabelNumber();
+        CgenSupport.emitBne(CgenSupport.ACC, CgenSupport.ZERO, labelValidDispatch, s);
+
+        CgenSupport.emitLoadAddress(CgenSupport.ACC, CgenSupport.FILENAME, s);
+        CgenSupport.emitLoadImm(CgenSupport.T1, this.lineNumber, s);
+        CgenSupport.emitJal(CgenSupport.DISPATCH_ABORT, s);
+
+        CgenSupport.emitLabelDef(labelValidDispatch, s);
+        CgenNode c = (CgenNode) classTable.lookup(exprType);
+        int methodOffset = c.getMethodOffset(this.name);
+
+        CgenSupport.emitLoad(CgenSupport.T1, CgenSupport.DISPTABLE_OFFSET, CgenSupport.ACC, s);
+        CgenSupport.emitLoad(CgenSupport.T1, methodOffset, CgenSupport.T1, s);
+        CgenSupport.emitJalr(CgenSupport.T1, s);
+
+        CgenSupport.emitComment("Finish dispatch" + exprType + "." + this.name, s);
     }
 
 
@@ -875,23 +910,22 @@ class dispatch extends Expression {
      * @param classTable
      */
     public void code(PrintStream s, CgenClassTable classTable) {
-        CgenSupport.emitComment("Start dispatch", s);
-
-        expr.code(s, classTable);
-
         AbstractSymbol exprType = expr.get_type();
         if (exprType == TreeConstants.SELF_TYPE) {
-            // TODO: 4/15/16 Self type??
+            exprType = CgenNode.getCurrClassType();
         }
-        // TODO: 4/15/16 attr or let or (1+2) or (New) or param
+        // TODO: 4/15/16 let
+        CgenSupport.emitComment("Begin dispatch" + exprType + "." + this.name, s);
 
-        // TODO: 4/15/16 Only handle attr
-        // TODO: 4/15/16 need to solve parameters
+        for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
+            Expression arg = (Expression) en.nextElement();
+            CgenSupport.emitComment("Evaluate and push" + arg.get_type(), s);
+            arg.code(s, classTable);
+            CgenSupport.emitPush(CgenSupport.ACC, s);
+            CgenSupport.emitComment("Done" + arg.get_type(), s);
+        }
 
-        CgenNode c1 = null; //CgenNode.getCurrClass();
-        int attrOffset = 0; //c1.getAttrOffset();
-
-        CgenSupport.emitLoad(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
+        expr.code(s, classTable);
 
         int labelValidDispatch = CgenSupport.getNewLabelNumber();
         CgenSupport.emitBne(CgenSupport.ACC, CgenSupport.ZERO, labelValidDispatch, s);
@@ -901,59 +935,14 @@ class dispatch extends Expression {
         CgenSupport.emitJal(CgenSupport.DISPATCH_ABORT, s);
 
         CgenSupport.emitLabelDef(labelValidDispatch, s);
-        CgenNode c2 = (CgenNode) classTable.lookup(exprType);
-        int methodOffset = c2.getMethodOffset(name);
+        CgenNode c = (CgenNode) classTable.lookup(exprType);
+        int methodOffset = c.getMethodOffset(this.name);
 
         CgenSupport.emitLoad(CgenSupport.T1, CgenSupport.DISPTABLE_OFFSET, CgenSupport.ACC, s);
         CgenSupport.emitLoad(CgenSupport.T1, methodOffset, CgenSupport.T1, s);
         CgenSupport.emitJalr(CgenSupport.T1, s);
 
-        CgenSupport.emitComment("Finish dispatch", s);
-
-        /*
-
-        AbstractSymbol exprType = expr.get_type();
-        if (exprType.equals(TreeConstants.SELF_TYPE)) {
-            // assign the current type to exprType
-            exprType = CgenNode.getCurrentType();
-        }
-        CgenNode c1 = (CgenNode) cgenTable.lookup(exprType);
-        CgenSupport.emitComment(s, "BEGIN dispatch for method "+name+ " in class " + exprType);
-
-        for(Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
-            Expression tmp = (Expression) en.nextElement();
-            CgenSupport.emitComment(s, "Evaluating and pushing argument of type "+tmp.get_type()+ " to current frame");
-            //Evaluate expression
-            tmp.code(s, cgenTable);
-            //push value of expression to stack
-            CgenSupport.emitPush(CgenSupport.ACC,s);
-            CgenSupport.emitComment(s, "Done pushing argument of type "+tmp.get_type()+ " to current frame");
-        }
-
-        //evaluate object expression
-        expr.code(s, cgenTable);
-
-        //handle dispatch on void
-        int notVoidDispatchLabel = CgenNode.getLabelCountAndIncrement();
-        CgenNode selfie = (CgenNode) cgenTable.lookup(TreeConstants.self);
-        CgenSupport.emitBne(CgenSupport.ACC, CgenSupport.ZERO, notVoidDispatchLabel, s);
-        CgenSupport.emitLoadString(CgenSupport.ACC, (StringSymbol) selfie.getFilename(), s);
-        CgenSupport.emitLoadImm(CgenSupport.T1, this.lineNumber, s);
-        CgenSupport.emitJal("_dispatch_abort",s);
-        CgenSupport.emitLabelDef(notVoidDispatchLabel, s);
-
-        //if not void continue as normal
-
-        //load dispatch table into T1
-        CgenSupport.emitLoad(CgenSupport.T1, 2, CgenSupport.ACC, s);
-        //c1.printMethodOffsets();
-        //get offset in distpatch table to desired method and execute method
-        CgenSupport.emitLoad(CgenSupport.T1, c1.getMethodOffset(name), CgenSupport.T1, s);
-        CgenSupport.emitJalr(CgenSupport.T1, s);
-
-        CgenSupport.emitComment(s, "DONE dispatch for method "+name+ " in class " + exprType);
-        */
-
+        CgenSupport.emitComment("Finish dispatch" + exprType + "." + this.name, s);
     }
 
 
@@ -2319,6 +2308,32 @@ class object extends Expression {
      * @param classTable
      */
     public void code(PrintStream s, CgenClassTable classTable) {
+        CgenSupport.emitComment("Start object:" + this.name, s);
+
+//        if(this.name == TreeConstants.self ){
+//            CgenSupport.emitMove(CgenSupport.ACC, CgenSupport.SELF, s);
+//        } else {
+//            //it's not a self object so could be an attribute of the class or in scope (like a let variable for example)
+//            //First check if this variable is in current scope
+//            if(cgenTable.probe(this.name) == null) {
+//                //not in current scope so it must be an attribute, so get offset of attribute
+//                // and load into current scope
+//                Object lookUpSelf = cgenTable.lookup(TreeConstants.self);
+//                CgenNode nd = (CgenNode) lookUpSelf;
+//                //CgenNode nd = (CgenNode) cgenTable.lookup(TreeConstants.self);
+//                int attrOffset = CgenNode.attrOffsetMap.get(nd.name).get(name);
+//                CgenSupport.emitLoad(CgenSupport.ACC, (2+attrOffset), CgenSupport.SELF, s);// check if 2 or 3
+//            } else {
+//                //is in the current scope, so get offset in frame and load into $a0
+//                int frameOffset = (Integer) cgenTable.probe(name) + 1;
+//                CgenSupport.emitLoad(CgenSupport.ACC, frameOffset, CgenSupport.FP, s);
+//            }
+//        }
+        if (this.name == TreeConstants.self) {
+            CgenSupport.emitMove(CgenSupport.ACC, CgenSupport.SELF, s);
+        } else {
+        }
+        CgenSupport.emitComment("Finish object:" + this.name, s);
     }
 
 

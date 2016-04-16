@@ -63,6 +63,17 @@ class CgenNode extends class_c {
      */
     private Map<AbstractSymbol, Integer> attrOffset;
 
+    private static AbstractSymbol currClassType;
+
+    /**
+     * Dispatch System
+     * Feature Table for the class
+     */
+    private Vector<method> methodTab;
+    private HashMap<method, AbstractSymbol> nameToClassMap;
+    private Vector<attr> attrTab;
+    private Vector<AbstractSymbol> currParam;
+
     /**
      * Constructs a new CgenNode to represent class "c".
      *
@@ -128,20 +139,6 @@ class CgenNode extends class_c {
     boolean basic() {
         return basic_status == Basic;
     }
-
-
-    /**
-     * Dispatch System
-     * <p>
-     * <p>
-     * <p>
-     * <p>
-     * Feature Table for the class
-     */
-    private Vector<method> methodTab;
-    private HashMap<method, AbstractSymbol> nameToClassMap;
-    private Vector<attr> attrTab;
-    private Vector<AbstractSymbol> currParam;
 
     public Boolean isParam(AbstractSymbol name) {
         return this.currParam.contains(name);
@@ -240,5 +237,8 @@ class CgenNode extends class_c {
         return this.attrTab.elements();
     }
 
-
+    public static AbstractSymbol getCurrClassType() {
+        return
+                currClassType;
+    }
 }
