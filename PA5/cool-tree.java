@@ -729,6 +729,16 @@ class assign extends Expression {
      * @param classTable
      */
     public void code(PrintStream s, CgenClassTable classTable) {
+        CgenSupport.emitComment("Start assign", s);
+
+        expr.code(s, classTable);
+        // TODO: 4/15/16 1.pair identifier to class type 2.attr or let or (1+2) or (New) or param
+        // TODO: 4/15/16 Only handle attr
+        CgenNode c = (CgenNode) classTable.lookup(name);
+        int attrOffset = c.getAttrOffset(name);
+        CgenSupport.emitStore(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
+
+        CgenSupport.emitComment("Finish assign", s);
 
     }
 
@@ -865,6 +875,85 @@ class dispatch extends Expression {
      * @param classTable
      */
     public void code(PrintStream s, CgenClassTable classTable) {
+        CgenSupport.emitComment("Start dispatch", s);
+
+        expr.code(s, classTable);
+
+        AbstractSymbol exprType = expr.get_type();
+        if (exprType == TreeConstants.SELF_TYPE) {
+            // TODO: 4/15/16 Self type??
+        }
+        // TODO: 4/15/16 attr or let or (1+2) or (New) or param
+
+        // TODO: 4/15/16 Only handle attr
+        // TODO: 4/15/16 need to solve parameters
+
+        CgenNode c1 = null; //CgenNode.getCurrClass();
+        int attrOffset = 0; //c1.getAttrOffset();
+
+        CgenSupport.emitLoad(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
+
+        int labelValidDispatch = CgenSupport.getNewLabelNumber();
+        CgenSupport.emitBne(CgenSupport.ACC, CgenSupport.ZERO, labelValidDispatch, s);
+
+        CgenSupport.emitLoadAddress(CgenSupport.ACC, CgenSupport.FILENAME, s);
+        CgenSupport.emitLoadImm(CgenSupport.T1, this.lineNumber, s);
+        CgenSupport.emitJal(CgenSupport.DISPATCH_ABORT, s);
+
+        CgenSupport.emitLabelDef(labelValidDispatch, s);
+        CgenNode c2 = (CgenNode) classTable.lookup(exprType);
+        int methodOffset = c2.getMethodOffset(name);
+
+        CgenSupport.emitLoad(CgenSupport.T1, CgenSupport.DISPTABLE_OFFSET, CgenSupport.ACC, s);
+        CgenSupport.emitLoad(CgenSupport.T1, methodOffset, CgenSupport.T1, s);
+        CgenSupport.emitJalr(CgenSupport.T1, s);
+
+        CgenSupport.emitComment("Finish dispatch", s);
+
+        /*
+
+        AbstractSymbol exprType = expr.get_type();
+        if (exprType.equals(TreeConstants.SELF_TYPE)) {
+            // assign the current type to exprType
+            exprType = CgenNode.getCurrentType();
+        }
+        CgenNode c1 = (CgenNode) cgenTable.lookup(exprType);
+        CgenSupport.emitComment(s, "BEGIN dispatch for method "+name+ " in class " + exprType);
+
+        for(Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
+            Expression tmp = (Expression) en.nextElement();
+            CgenSupport.emitComment(s, "Evaluating and pushing argument of type "+tmp.get_type()+ " to current frame");
+            //Evaluate expression
+            tmp.code(s, cgenTable);
+            //push value of expression to stack
+            CgenSupport.emitPush(CgenSupport.ACC,s);
+            CgenSupport.emitComment(s, "Done pushing argument of type "+tmp.get_type()+ " to current frame");
+        }
+
+        //evaluate object expression
+        expr.code(s, cgenTable);
+
+        //handle dispatch on void
+        int notVoidDispatchLabel = CgenNode.getLabelCountAndIncrement();
+        CgenNode selfie = (CgenNode) cgenTable.lookup(TreeConstants.self);
+        CgenSupport.emitBne(CgenSupport.ACC, CgenSupport.ZERO, notVoidDispatchLabel, s);
+        CgenSupport.emitLoadString(CgenSupport.ACC, (StringSymbol) selfie.getFilename(), s);
+        CgenSupport.emitLoadImm(CgenSupport.T1, this.lineNumber, s);
+        CgenSupport.emitJal("_dispatch_abort",s);
+        CgenSupport.emitLabelDef(notVoidDispatchLabel, s);
+
+        //if not void continue as normal
+
+        //load dispatch table into T1
+        CgenSupport.emitLoad(CgenSupport.T1, 2, CgenSupport.ACC, s);
+        //c1.printMethodOffsets();
+        //get offset in distpatch table to desired method and execute method
+        CgenSupport.emitLoad(CgenSupport.T1, c1.getMethodOffset(name), CgenSupport.T1, s);
+        CgenSupport.emitJalr(CgenSupport.T1, s);
+
+        CgenSupport.emitComment(s, "DONE dispatch for method "+name+ " in class " + exprType);
+        */
+
     }
 
 
@@ -943,7 +1032,6 @@ class cond extends Expression {
         CgenSupport.emitLabelDef(ifTrueLabel, s);
         then_exp.code(s, classTable);
         CgenSupport.emitLabelDef(ifEndLabel, s);
-
         CgenSupport.emitComment("Finish cond", s);
     }
 
@@ -1603,6 +1691,29 @@ class lt extends Expression {
      * @param classTable
      */
     public void code(PrintStream s, CgenClassTable classTable) {
+        CgenSupport.emitComment("Start less than", s);
+        e1.code(s, classTable);
+        CgenSupport.emitPush(CgenSupport.ACC, s);
+        e2.code(s, classTable);
+
+        int labelTrue = CgenSupport.getNewLabelNumber();
+        int labelEnd = CgenSupport.getNewLabelNumber();
+
+        CgenSupport.emitLoad(CgenSupport.T1, 1, CgenSupport.SP, s);
+        CgenSupport.emitLoadIntBoolObjVal(CgenSupport.T1, CgenSupport.T1, s);
+        CgenSupport.emitLoadIntBoolObjVal(CgenSupport.ACC, CgenSupport.ACC, s);
+
+        CgenSupport.emitBlt(CgenSupport.T1, CgenSupport.ACC, labelTrue, s);
+        CgenSupport.emitLoadBool(CgenSupport.ACC, BoolConst.falsebool, s);
+        CgenSupport.emitBranch(labelEnd, s);
+
+        CgenSupport.emitLabelDef(labelTrue, s);
+        CgenSupport.emitLoadBool(CgenSupport.ACC, BoolConst.truebool, s);
+
+        CgenSupport.emitLabelDef(labelEnd, s);
+
+        CgenSupport.emitPop(s);
+        CgenSupport.emitComment("Start less than", s);
     }
 
 
@@ -1748,7 +1859,6 @@ class leq extends Expression {
         CgenSupport.emitLoadIntBoolObjVal(CgenSupport.T1, CgenSupport.T1, s);
         CgenSupport.emitLoadIntBoolObjVal(CgenSupport.ACC, CgenSupport.ACC, s);
 
-        //If e1 <= e2 return true boolean constant else return false boolean constant
         CgenSupport.emitBleq(CgenSupport.T1, CgenSupport.ACC, labelTrue, s);
         CgenSupport.emitLoadBool(CgenSupport.ACC, BoolConst.falsebool, s);
         CgenSupport.emitBranch(labelEnd, s);
@@ -1832,7 +1942,6 @@ class comp extends Expression {
 
         CgenSupport.emitLabelDef(labelEnd, s);
         CgenSupport.emitComment("Finish not", s);
-
     }
 
 
@@ -2044,6 +2153,11 @@ class new_ extends Expression {
      * @param classTable
      */
     public void code(PrintStream s, CgenClassTable classTable) {
+        CgenSupport.emitComment("Start new", s);
+        CgenSupport.emitLoadAddress(CgenSupport.ACC, this.type_name + CgenSupport.PROTOBJ_SUFFIX, s);
+        CgenSupport.emitJal(CgenSupport.OBJECT_COPY, s);
+        CgenSupport.emitJal(this.type_name + CgenSupport.CLASSINIT_SUFFIX, s);
+        CgenSupport.emitComment("Finish new", s);
     }
 
 
