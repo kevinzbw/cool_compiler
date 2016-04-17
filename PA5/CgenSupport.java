@@ -872,15 +872,14 @@ class CgenSupport {
     }
 
     static void emitMethodCode(PrintStream s, method f, CgenClassTable classTable, CgenNode cn){
-        CgenNode.setCurrClass(cn.getName());
         emitMethodRef(cn.getName(),f.getName(),s);
         emitMethodPre(s);
-        f.expr.code(s,classTable);
+        f.expr.code(s,classTable,cn);
         emitMethodEnd(s);
     }
 
     static void emitOneAttrAssignCode(PrintStream s, attr a, CgenNode cn, CgenClassTable cgenClassTable){
-        CgenNode.setCurrClass(cn.getName());
+        a.init.code(s,cgenClassTable,cn);
         emitStore(ACC, cn.getAttrOffset(a.getName()), SELF,s);
     }
 
