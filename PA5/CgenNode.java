@@ -54,15 +54,25 @@ class CgenNode extends class_c {
     private int basic_status;
 
     /**
+     * Map from method to offset.
+     */
+    private Map<AbstractSymbol, Integer> methodOffset;
+
+    /**
+     * Map from attr to offset.
+     */
+    private Map<AbstractSymbol, Integer> attrOffset;
+
+    /**
      * Dispatch System
      * Feature Table for the class
      */
     private Vector<method> methodTab;
     private HashMap<method, AbstractSymbol> nameToClassMap;
     private Vector<attr> attrTab;
-    public static SymbolTable currParam;
-    public static AbstractSymbol currClassType;
 
+    //Check the location of id
+    private static identifierTable idTable;
 
     /**
      * Constructs a new CgenNode to represent class "c".
@@ -81,7 +91,6 @@ class CgenNode extends class_c {
         this.methodTab = new Vector();
         this.attrTab = new Vector();
         this.nameToClassMap = new HashMap();
-        this.currParam = new SymbolTable();
     }
 
     void addChild(CgenNode child) {
@@ -131,16 +140,13 @@ class CgenNode extends class_c {
         return basic_status == Basic;
     }
 
-
-
-    public Boolean isParam(AbstractSymbol name) {
-        return currParam.probe(name)!=null;
+    public static int getIdLocation(AbstractSymbol name) {
+        return idTable.lookupLocation(name);
     }
 
-    public int getParamOffset(AbstractSymbol name) {
-        return (Integer)currParam.probe(name);
+    public static int getOffset(AbstractSymbol name) {
+        return (Integer) idTable.lookup(name);
     }
-
 
     public void constructFeatureTabs() {
         this.methodTab = parent.cloneMethodTab();
@@ -227,7 +233,5 @@ class CgenNode extends class_c {
         return this.attrTab.elements();
     }
 
-    public static void setCurrClass(AbstractSymbol name){
-        currClassType = name;
-    }
+
 }

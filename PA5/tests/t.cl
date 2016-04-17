@@ -1,16 +1,22 @@
 class A {
-	ha () : Int {
-		1
+	a:Int <- 1;
+	foo(a: Int):SELF_TYPE {
+		{
+		a + 1;
+		self;
+		}
 	};
-	foo(h: Int):SELF_TYPE {
-		self
+};
+
+class B inherits A {
+	g():Int{
+		1
 	};
 };
 
 class Main inherits IO {
-  b : Int;
-  a:A;
+	a:B <- new B;
   main():Object {
-    new A
+    a.g()
   };
 };

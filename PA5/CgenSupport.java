@@ -135,8 +135,9 @@ class CgenSupport {
     //Label number
     static int CURRENT_LABEL_NUMBER = 0;
 
-    //Current cgenNode
-    static CgenNode currCgenNode;
+    // location of identifierTable
+    final static int ATTR = 0;
+    final static int PARAM = 1;
 
     /**
      * Emits an LW instruction.
