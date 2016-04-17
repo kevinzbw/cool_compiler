@@ -826,13 +826,61 @@ class CgenSupport {
         }
     }
 
-    static void emitClassInitializer(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable) {
+    static void emitClassInitForTree(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable) {
         s.println(cn.getName() + CLASSINIT_SUFFIX);
-
-
+        emitInitMethodCode(s,cn,cgenClassTable);
         for (Enumeration e = cn.getChildren(); e.hasMoreElements(); ) {
-            emitClassInitializer(s, (CgenNode) e.nextElement(), cgenClassTable);
+            emitClassInitForTree(s, (CgenNode) e.nextElement(), cgenClassTable);
         }
+    }
+
+    static void emitInitMethodCode(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable){
+        emitMethodPre(s);
+        if (!cn.getName().equals(TreeConstants.Object_)) {
+            emitJal(cn.getParent() + CLASSINIT_SUFFIX, s);
+        }
+        for (Enumeration<attr> e = cn.getAttrElement(); e.hasMoreElements(); ){
+            emitOneAttrAssignCode(s, (attr)e, cn,cgenClassTable);
+        }
+        emitMethodEnd(s);
+    }
+
+    static void emitMethodCodeForTree(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable){
+        for (Enumeration e = cn.getMethodElement(); e.hasMoreElements(); ){
+            emitMethodCode(s, (method)e.nextElement(), cgenClassTable, cn);
+        }
+        for(Enumeration e = cn.getChildren(); e.hasMoreElements(); ){
+            emitMethodCodeForTree(s,(CgenNode) e.nextElement(),cgenClassTable);
+        }
+    }
+
+    static void emitMethodPre(PrintStream s){
+        emitPush(FP,s);
+        emitPush(SELF,s);
+        emitPush(RA,s);
+        emitAddiu(FP,SP,4,s);
+        emitMove(SELF,ACC,s);
+    }
+
+    static void emitMethodEnd(PrintStream s){
+        emitLoad(FP,12,SP,s);
+        emitLoad(SELF,8,SP,s);
+        emitLoad(RA,4,SP,s);
+        emitAddiu(SP,SP,12,s);
+        emitReturn(s);
+    }
+
+    static void emitMethodCode(PrintStream s, method f, CgenClassTable classTable, CgenNode cn){
+        CgenNode.setCurrClass(cn.getName());
+        emitMethodRef(cn.getName(),f.getName(),s);
+        emitMethodPre(s);
+        f.expr.code(s,classTable);
+        emitMethodEnd(s);
+    }
+
+    static void emitOneAttrAssignCode(PrintStream s, attr a, CgenNode cn, CgenClassTable cgenClassTable){
+        CgenNode.setCurrClass(cn.getName());
+        emitStore(ACC, cn.getAttrOffset(a.getName()), SELF,s);
     }
 
 }

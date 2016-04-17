@@ -544,15 +544,20 @@ class CgenClassTable extends SymbolTable {
 
         if (Flags.cgen_debug) System.out.println("coding class initalizer");
         codeClassInitalizer();
+
+        if (Flags.cgen_debug) System.out.println("coding class method");
+        codeClassMethod();
+    }
+
+    public void codeClassMethod(){
+        CgenSupport.emitMethodCodeForTree(str,this.root(),this);
     }
 
     /**
      * Code class initalizer
      */
     public void codeClassInitalizer(){
-        for(Enumeration e= nds.elements(); e.hasMoreElements(); ){
-            CgenSupport.emitClassInitializer(str,(CgenNode)e.nextElement(),this);
-        }
+        CgenSupport.emitClassInitForTree(str,this.root(),this);
     }
 
     /**
