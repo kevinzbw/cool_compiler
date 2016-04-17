@@ -872,10 +872,16 @@ class CgenSupport {
     }
 
     static void emitMethodCode(PrintStream s, method f, CgenClassTable classTable, CgenNode cn){
+        cn.idTableEnterscope();
+        int index = 0;
+        for (Enumeration e = f.formals.getElements(); e.hasMoreElements(); ){
+            cn.idTableAddID(((formalc)e.nextElement()).getName(),index++);
+        }
         emitMethodRef(cn.getName(),f.getName(),s);
         emitMethodPre(s);
         f.expr.code(s,classTable,cn);
         emitMethodEnd(s);
+        cn.idTableExitscope();
     }
 
     static void emitOneAttrAssignCode(PrintStream s, attr a, CgenNode cn, CgenClassTable cgenClassTable){

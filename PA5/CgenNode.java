@@ -72,7 +72,7 @@ class CgenNode extends class_c {
     private Vector<attr> attrTab;
 
     //Check the location of id
-    private static identifierTable idTable;
+    private identifierTable idTable;
 
     /**
      * Constructs a new CgenNode to represent class "c".
@@ -91,6 +91,8 @@ class CgenNode extends class_c {
         this.methodTab = new Vector();
         this.attrTab = new Vector();
         this.nameToClassMap = new HashMap();
+        this.idTable = new identifierTable();
+        this.idTable.enterScope();
     }
 
     void addChild(CgenNode child) {
@@ -140,11 +142,11 @@ class CgenNode extends class_c {
         return basic_status == Basic;
     }
 
-    public static int getIdLocation(AbstractSymbol name) {
+    public int getIdLocation(AbstractSymbol name) {
         return idTable.lookupLocation(name);
     }
 
-    public static int getOffset(AbstractSymbol name) {
+    public int getOffset(AbstractSymbol name) {
         return (Integer) idTable.lookup(name);
     }
 
@@ -158,6 +160,7 @@ class CgenNode extends class_c {
             if (f.getClass() == (new attr(0, null, null, null)).getClass()) {
                 /** e is Attr */
                 attrTab.addElement((attr) f);
+                this.idTable.addId(((attr) f).getName(),attrTab.indexOf(f));
             } else {
                 /** e is Method */
                 if (isOverrideMethod(((method) f).getName())) {
@@ -232,6 +235,23 @@ class CgenNode extends class_c {
     public Enumeration getAttrElement() {
         return this.attrTab.elements();
     }
+
+    public void idTableEnterscope(){
+        this.idTable.enterScope();
+    }
+
+    public void idTableExitscope(){
+        this.idTable.exitScope();
+    }
+
+    public void idTableAddID(AbstractSymbol id, int index){
+        this.idTable.addId(id,index);
+    }
+
+    public int idTableLookUpLocation(AbstractSymbol id){
+       return this.idTable.lookupLocation(id);
+    }
+
 
 
 }
