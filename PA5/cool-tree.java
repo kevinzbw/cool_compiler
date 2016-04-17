@@ -632,6 +632,7 @@ class formalc extends Formal {
         dump_AbstractSymbol(out, n + 2, type_decl);
     }
 
+    public AbstractSymbol getName(){return this.name;}
 }
 
 

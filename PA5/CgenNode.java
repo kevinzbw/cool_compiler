@@ -91,6 +91,8 @@ class CgenNode extends class_c {
         this.methodTab = new Vector();
         this.attrTab = new Vector();
         this.nameToClassMap = new HashMap();
+        this.idTable = new identifierTable();
+        this.idTable.enterScope();
     }
 
     void addChild(CgenNode child) {
@@ -158,6 +160,7 @@ class CgenNode extends class_c {
             if (f.getClass() == (new attr(0, null, null, null)).getClass()) {
                 /** e is Attr */
                 attrTab.addElement((attr) f);
+                this.idTable.addId(((attr) f).getName(),attrTab.indexOf(f));
             } else {
                 /** e is Method */
                 if (isOverrideMethod(((method) f).getName())) {
@@ -232,6 +235,23 @@ class CgenNode extends class_c {
     public Enumeration getAttrElement() {
         return this.attrTab.elements();
     }
+
+    public void idTableEnterscope(){
+        this.idTable.enterScope();
+    }
+
+    public void idTableExitscope(){
+        this.idTable.exitScope();
+    }
+
+    public void idTableAddID(AbstractSymbol id, int index){
+        this.idTable.addId(id,index);
+    }
+
+    public int idTableLookUpLocation(AbstractSymbol id){
+       return this.idTable.lookupLocation(id);
+    }
+
 
 
     public void idTableEnterScope() { idTable.enterScope(); }
