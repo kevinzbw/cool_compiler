@@ -818,6 +818,7 @@ class static_dispatch extends Expression {
         // TODO: 4/15/16 let
         CgenSupport.emitComment("Begin dispatch" + exprType + "." + this.name, s);
 
+
         for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
             Expression arg = (Expression) en.nextElement();
             CgenSupport.emitComment("Evaluate and push" + arg.get_type(), s);
@@ -1025,8 +1026,6 @@ class cond extends Expression {
         CgenSupport.emitLabelDef(ifEndLabel, s);
         CgenSupport.emitComment("Finish cond", s);
     }
-
-
 }
 
 
@@ -1038,6 +1037,7 @@ class cond extends Expression {
 class loop extends Expression {
     protected Expression pred;
     protected Expression body;
+
 
     /**
      * Creates "loop" AST node.
@@ -1278,6 +1278,10 @@ class let extends Expression {
      */
     public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         // TODO: 4/16/16 let_code
+        CgenSupport.emitComment("Start let", s);
+        //cn.idTableEnterScope();
+        //init.code(s, classTable, cn);
+        CgenSupport.emitComment("Finish let", s);
     }
 
 
@@ -2316,14 +2320,16 @@ class object extends Expression {
         if (this.name == TreeConstants.self) {
             CgenSupport.emitMove(CgenSupport.ACC, CgenSupport.SELF, s);
         } else {
-            if (cn.getIdLocation(this.name) == CgenSupport.PARAM){
-                int frameOffset = cn.getOffset(this.name);
-                CgenSupport.emitLoad(CgenSupport.ACC, frameOffset, CgenSupport.FP, s);
-            } else {
+            if (cn.getIdLocation(this.name) == CgenSupport.ATTR) {
                 AbstractSymbol currClassType = cn.getName();
                 CgenNode c = (CgenNode) classTable.lookup(currClassType);
                 int attrOffset = c.getAttrOffset(this.name);
                 CgenSupport.emitLoad(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
+            } else if (cn.getIdLocation(this.name) == CgenSupport.PARAM) {
+                int frameOffset = cn.getOffset(this.name);
+                CgenSupport.emitLoad(CgenSupport.ACC, frameOffset, CgenSupport.FP, s);
+            } else {
+
             }
         }
         CgenSupport.emitComment("Finish object:" + this.name, s);

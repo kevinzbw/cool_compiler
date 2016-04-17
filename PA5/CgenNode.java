@@ -72,7 +72,7 @@ class CgenNode extends class_c {
     private Vector<attr> attrTab;
 
     //Check the location of id
-    private static identifierTable idTable;
+    private identifierTable idTable;
 
     /**
      * Constructs a new CgenNode to represent class "c".
@@ -140,11 +140,11 @@ class CgenNode extends class_c {
         return basic_status == Basic;
     }
 
-    public static int getIdLocation(AbstractSymbol name) {
+    public int getIdLocation(AbstractSymbol name) {
         return idTable.lookupLocation(name);
     }
 
-    public static int getOffset(AbstractSymbol name) {
+    public int getOffset(AbstractSymbol name) {
         return (Integer) idTable.lookup(name);
     }
 
@@ -233,5 +233,11 @@ class CgenNode extends class_c {
         return this.attrTab.elements();
     }
 
+
+    public void idTableEnterScope() { idTable.enterScope(); }
+
+    public void idTableExitScope() { idTable.exitScope(); }
+
+    public void idTableAddID(AbstractSymbol name, Integer offset) { idTable.addId(name, offset); }
 
 }
