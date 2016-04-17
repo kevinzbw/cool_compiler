@@ -225,7 +225,7 @@ abstract class Expression extends TreeNode {
         }
     }
 
-    public abstract void code(PrintStream s, CgenClassTable classTable);
+    public abstract void code(PrintStream s, CgenClassTable classTable, CgenNode cn);
 
 }
 
@@ -728,14 +728,14 @@ class assign extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start assign", s);
 
-        expr.code(s, classTable);
+        expr.code(s, classTable, cn);
         // TODO: 4/15/16 1.pair identifier to class type 2.attr or let or (1+2) or (New) or param
         // TODO: 4/15/16 Only handle attr
         CgenNode c = (CgenNode) classTable.lookup(name);
@@ -743,7 +743,6 @@ class assign extends Expression {
         CgenSupport.emitStore(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
 
         CgenSupport.emitComment("Finish assign", s);
-
     }
 
 
@@ -809,11 +808,11 @@ class static_dispatch extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         AbstractSymbol exprType = this.type_name;
 
         // TODO: 4/15/16 let
@@ -822,12 +821,12 @@ class static_dispatch extends Expression {
         for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
             Expression arg = (Expression) en.nextElement();
             CgenSupport.emitComment("Evaluate and push" + arg.get_type(), s);
-            arg.code(s, classTable);
+            arg.code(s, classTable, cn);
             CgenSupport.emitPush(CgenSupport.ACC, s);
             CgenSupport.emitComment("Done" + arg.get_type(), s);
         }
 
-        expr.code(s, classTable);
+        expr.code(s, classTable, cn);
 
         int labelValidDispatch = CgenSupport.getNewLabelNumber();
         CgenSupport.emitBne(CgenSupport.ACC, CgenSupport.ZERO, labelValidDispatch, s);
@@ -844,6 +843,9 @@ class static_dispatch extends Expression {
         CgenSupport.emitLoad(CgenSupport.T1, methodOffset, CgenSupport.T1, s);
         CgenSupport.emitJalr(CgenSupport.T1, s);
 
+        for (Enumeration en = actual.getElements(); en.hasMoreElements(); en.nextElement()) {
+            CgenSupport.emitPop(s);
+        }
         CgenSupport.emitComment("Finish dispatch" + exprType + "." + this.name, s);
     }
 
@@ -905,14 +907,14 @@ class dispatch extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         AbstractSymbol exprType = expr.get_type();
         if (exprType == TreeConstants.SELF_TYPE) {
-            exprType = CgenNode.getCurrClassType();
+            exprType = cn.getName();
         }
         // TODO: 4/15/16 let
         CgenSupport.emitComment("Begin dispatch" + exprType + "." + this.name, s);
@@ -920,12 +922,12 @@ class dispatch extends Expression {
         for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
             Expression arg = (Expression) en.nextElement();
             CgenSupport.emitComment("Evaluate and push" + arg.get_type(), s);
-            arg.code(s, classTable);
+            arg.code(s, classTable, cn);
             CgenSupport.emitPush(CgenSupport.ACC, s);
             CgenSupport.emitComment("Done" + arg.get_type(), s);
         }
 
-        expr.code(s, classTable);
+        expr.code(s, classTable, cn);
 
         int labelValidDispatch = CgenSupport.getNewLabelNumber();
         CgenSupport.emitBne(CgenSupport.ACC, CgenSupport.ZERO, labelValidDispatch, s);
@@ -999,27 +1001,27 @@ class cond extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start cond", s);
 
         int ifFalseLabel = CgenSupport.getNewLabelNumber();
         int ifTrueLabel = CgenSupport.getNewLabelNumber();
         int ifEndLabel = CgenSupport.getNewLabelNumber();
 
-        pred.code(s, classTable);
+        pred.code(s, classTable, cn);
         CgenSupport.emitLoadBool(CgenSupport.T1, BoolConst.truebool, s);
         CgenSupport.emitBeq(CgenSupport.ACC, CgenSupport.T1, ifTrueLabel, s);
 
         CgenSupport.emitLabelDef(ifFalseLabel, s);
-        else_exp.code(s, classTable);
+        else_exp.code(s, classTable, cn);
         CgenSupport.emitBranch(ifEndLabel, s);
 
         CgenSupport.emitLabelDef(ifTrueLabel, s);
-        then_exp.code(s, classTable);
+        then_exp.code(s, classTable, cn);
         CgenSupport.emitLabelDef(ifEndLabel, s);
         CgenSupport.emitComment("Finish cond", s);
     }
@@ -1073,21 +1075,21 @@ class loop extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start while", s);
         int whileLabel = CgenSupport.getNewLabelNumber();
         int whileEndLabel = CgenSupport.getNewLabelNumber();
 
         CgenSupport.emitLabelDef(whileLabel, s);
-        pred.code(s, classTable);
+        pred.code(s, classTable, cn);
 
         CgenSupport.emitLoadBool(CgenSupport.T1, BoolConst.truebool, s);
         CgenSupport.emitBne(CgenSupport.ACC, CgenSupport.T1, whileEndLabel, s);
-        body.code(s, classTable);
+        body.code(s, classTable, cn);
         CgenSupport.emitBranch(whileLabel, s);
 
         CgenSupport.emitLabelDef(whileEndLabel, s);
@@ -1145,11 +1147,12 @@ class typcase extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
+        // TODO: 4/16/16 case_code
     }
 
 
@@ -1198,14 +1201,14 @@ class block extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start block", s);
         for (Enumeration e = body.getElements(); e.hasMoreElements(); ) {
-            ((Expression) e.nextElement()).code(s, classTable);
+            ((Expression) e.nextElement()).code(s, classTable, cn);
         }
         CgenSupport.emitComment("Finish block", s);
     }
@@ -1269,11 +1272,12 @@ class let extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
+        // TODO: 4/16/16 let_code
     }
 
 
@@ -1325,15 +1329,15 @@ class plus extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start plus", s);
-        e1.code(s, classTable);
+        e1.code(s, classTable, cn);
         CgenSupport.emitPush(CgenSupport.ACC, s);
-        e2.code(s, classTable);
+        e2.code(s, classTable, cn);
 
         CgenSupport.emitJal(CgenSupport.OBJECT_COPY, s);
 
@@ -1398,15 +1402,15 @@ class sub extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start sub", s);
-        e1.code(s, classTable);
+        e1.code(s, classTable, cn);
         CgenSupport.emitPush(CgenSupport.ACC, s);
-        e2.code(s, classTable);
+        e2.code(s, classTable, cn);
 
         CgenSupport.emitJal(CgenSupport.OBJECT_COPY, s);
 
@@ -1471,15 +1475,15 @@ class mul extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start mul", s);
-        e1.code(s, classTable);
+        e1.code(s, classTable, cn);
         CgenSupport.emitPush(CgenSupport.ACC, s);
-        e2.code(s, classTable);
+        e2.code(s, classTable, cn);
 
         CgenSupport.emitJal(CgenSupport.OBJECT_COPY, s);
 
@@ -1542,15 +1546,15 @@ class divide extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start div", s);
-        e1.code(s, classTable);
+        e1.code(s, classTable, cn);
         CgenSupport.emitPush(CgenSupport.ACC, s);
-        e2.code(s, classTable);
+        e2.code(s, classTable, cn);
 
         CgenSupport.emitJal(CgenSupport.OBJECT_COPY, s);
 
@@ -1610,13 +1614,13 @@ class neg extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start negate", s);
-        e1.code(s, classTable);
+        e1.code(s, classTable, cn);
 
         CgenSupport.emitJal(CgenSupport.OBJECT_COPY, s);
 
@@ -1675,15 +1679,15 @@ class lt extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start less than", s);
-        e1.code(s, classTable);
+        e1.code(s, classTable, cn);
         CgenSupport.emitPush(CgenSupport.ACC, s);
-        e2.code(s, classTable);
+        e2.code(s, classTable, cn);
 
         int labelTrue = CgenSupport.getNewLabelNumber();
         int labelEnd = CgenSupport.getNewLabelNumber();
@@ -1754,18 +1758,18 @@ class eq extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start equal", s);
 
         int labelEqual = CgenSupport.getNewLabelNumber();
 
-        e1.code(s, classTable);
+        e1.code(s, classTable, cn);
         CgenSupport.emitPush(CgenSupport.ACC, s);
-        e2.code(s, classTable);
+        e2.code(s, classTable, cn);
 
         CgenSupport.emitLoad(CgenSupport.T1, 1, CgenSupport.SP, s);
         CgenSupport.emitMove(CgenSupport.T2, CgenSupport.ACC, s);
@@ -1831,15 +1835,15 @@ class leq extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start less than or equal", s);
-        e1.code(s, classTable);
+        e1.code(s, classTable, cn);
         CgenSupport.emitPush(CgenSupport.ACC, s);
-        e2.code(s, classTable);
+        e2.code(s, classTable, cn);
 
         int labelTrue = CgenSupport.getNewLabelNumber();
         int labelEnd = CgenSupport.getNewLabelNumber();
@@ -1859,7 +1863,6 @@ class leq extends Expression {
 
         CgenSupport.emitPop(s);
         CgenSupport.emitComment("Start less than or equal", s);
-
     }
 
 
@@ -1906,13 +1909,13 @@ class comp extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start not", s);
-        e1.code(s, classTable);
+        e1.code(s, classTable, cn);
 
         CgenSupport.emitLoadIntBoolObjVal(CgenSupport.T1, CgenSupport.ACC, s);
 
@@ -1976,11 +1979,11 @@ class int_const extends Expression {
     /**
      * Generates code for this expression.  This method method is provided
      * to you as an example of code generation.
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start int_const", s);
         CgenSupport.emitLoadInt(CgenSupport.ACC,
                 (IntSymbol) AbstractTable.inttable.lookup(token.getString()), s);
@@ -2029,11 +2032,11 @@ class bool_const extends Expression {
     /**
      * Generates code for this expression.  This method method is provided
      * to you as an example of code generation.
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start bool_const", s);
         CgenSupport.emitLoadBool(CgenSupport.ACC, new BoolConst(val), s);
         CgenSupport.emitComment("Finish bool_const", s);
@@ -2083,11 +2086,11 @@ class string_const extends Expression {
     /**
      * Generates code for this expression.  This method method is provided
      * to you as an example of code generation.
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start string_const", s);
         CgenSupport.emitLoadString(CgenSupport.ACC,
                 (StringSymbol) AbstractTable.stringtable.lookup(token.getString()), s);
@@ -2137,11 +2140,11 @@ class new_ extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start new", s);
         CgenSupport.emitLoadAddress(CgenSupport.ACC, this.type_name + CgenSupport.PROTOBJ_SUFFIX, s);
         CgenSupport.emitJal(CgenSupport.OBJECT_COPY, s);
@@ -2193,13 +2196,13 @@ class isvoid extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start isvoid", s);
-        e1.code(s, classTable);
+        e1.code(s, classTable, cn);
 
         int labelTrue = CgenSupport.getNewLabelNumber();
         int labelFalse = CgenSupport.getNewLabelNumber();
@@ -2252,11 +2255,12 @@ class no_expr extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
+        // TODO: 4/16/16 no_code
     }
 
 
@@ -2303,40 +2307,25 @@ class object extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *
-     * @param s          the output stream
+     *  @param s          the output stream
      * @param classTable
+     * @param cn
      */
-    public void code(PrintStream s, CgenClassTable classTable) {
+    public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start object:" + this.name, s);
-
-//        if(this.name == TreeConstants.self ){
-//            CgenSupport.emitMove(CgenSupport.ACC, CgenSupport.SELF, s);
-//        } else {
-//            //it's not a self object so could be an attribute of the class or in scope (like a let variable for example)
-//            //First check if this variable is in current scope
-//            if(cgenTable.probe(this.name) == null) {
-//                //not in current scope so it must be an attribute, so get offset of attribute
-//                // and load into current scope
-//                Object lookUpSelf = cgenTable.lookup(TreeConstants.self);
-//                CgenNode nd = (CgenNode) lookUpSelf;
-//                //CgenNode nd = (CgenNode) cgenTable.lookup(TreeConstants.self);
-//                int attrOffset = CgenNode.attrOffsetMap.get(nd.name).get(name);
-//                CgenSupport.emitLoad(CgenSupport.ACC, (2+attrOffset), CgenSupport.SELF, s);// check if 2 or 3
-//            } else {
-//                //is in the current scope, so get offset in frame and load into $a0
-//                int frameOffset = (Integer) cgenTable.probe(name) + 1;
-//                CgenSupport.emitLoad(CgenSupport.ACC, frameOffset, CgenSupport.FP, s);
-//            }
-//        }
         if (this.name == TreeConstants.self) {
             CgenSupport.emitMove(CgenSupport.ACC, CgenSupport.SELF, s);
         } else {
+            if (cn.getIdLocation(this.name) == CgenSupport.PARAM){
+                int frameOffset = cn.getOffset(this.name);
+                CgenSupport.emitLoad(CgenSupport.ACC, frameOffset, CgenSupport.FP, s);
+            } else {
+                AbstractSymbol currClassType = cn.getName();
+                CgenNode c = (CgenNode) classTable.lookup(currClassType);
+                int attrOffset = c.getAttrOffset(this.name);
+                CgenSupport.emitLoad(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
+            }
         }
         CgenSupport.emitComment("Finish object:" + this.name, s);
     }
-
-
 }
-
-

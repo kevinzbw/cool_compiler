@@ -63,8 +63,6 @@ class CgenNode extends class_c {
      */
     private Map<AbstractSymbol, Integer> attrOffset;
 
-    private static AbstractSymbol currClassType;
-
     /**
      * Dispatch System
      * Feature Table for the class
@@ -72,7 +70,9 @@ class CgenNode extends class_c {
     private Vector<method> methodTab;
     private HashMap<method, AbstractSymbol> nameToClassMap;
     private Vector<attr> attrTab;
-    private Vector<AbstractSymbol> currParam;
+
+    //Check the location of id
+    private static identifierTable idTable;
 
     /**
      * Constructs a new CgenNode to represent class "c".
@@ -140,16 +140,12 @@ class CgenNode extends class_c {
         return basic_status == Basic;
     }
 
-    public Boolean isParam(AbstractSymbol name) {
-        return this.currParam.contains(name);
+    public static int getIdLocation(AbstractSymbol name) {
+        return idTable.lookupLocation(name);
     }
 
-    public int getParamOffset(AbstractSymbol name) {
-        return this.currParam.indexOf(name);
-    }
-
-    public int getParamSize() {
-        return this.currParam.size();
+    public static int getOffset(AbstractSymbol name) {
+        return (Integer) idTable.lookup(name);
     }
 
     public void constructFeatureTabs() {
@@ -235,10 +231,5 @@ class CgenNode extends class_c {
 
     public Enumeration getAttrElement() {
         return this.attrTab.elements();
-    }
-
-    public static AbstractSymbol getCurrClassType() {
-        return
-                currClassType;
     }
 }
