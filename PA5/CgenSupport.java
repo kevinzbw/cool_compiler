@@ -829,64 +829,64 @@ class CgenSupport {
 
     static void emitClassInitForTree(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable) {
         s.println(cn.getName() + CLASSINIT_SUFFIX);
-        emitInitMethodCode(s,cn,cgenClassTable);
+        emitInitMethodCode(s, cn, cgenClassTable);
         for (Enumeration e = cn.getChildren(); e.hasMoreElements(); ) {
             emitClassInitForTree(s, (CgenNode) e.nextElement(), cgenClassTable);
         }
     }
 
-    static void emitInitMethodCode(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable){
+    static void emitInitMethodCode(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable) {
         emitMethodPre(s);
         if (!cn.getName().equals(TreeConstants.Object_)) {
             emitJal(cn.getParent() + CLASSINIT_SUFFIX, s);
         }
-        for (Enumeration<attr> e = cn.getAttrElement(); e.hasMoreElements(); ){
-            emitOneAttrAssignCode(s, (attr)e, cn,cgenClassTable);
+        for (Enumeration<attr> e = cn.getAttrElement(); e.hasMoreElements(); ) {
+            emitOneAttrAssignCode(s, (attr) e, cn, cgenClassTable);
         }
         emitMethodEnd(s);
     }
 
-    static void emitMethodCodeForTree(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable){
-        for (Enumeration e = cn.getMethodElement(); e.hasMoreElements(); ){
-            emitMethodCode(s, (method)e.nextElement(), cgenClassTable, cn);
+    static void emitMethodCodeForTree(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable) {
+        for (Enumeration e = cn.getMethodElement(); e.hasMoreElements(); ) {
+            emitMethodCode(s, (method) e.nextElement(), cgenClassTable, cn);
         }
-        for(Enumeration e = cn.getChildren(); e.hasMoreElements(); ){
-            emitMethodCodeForTree(s,(CgenNode) e.nextElement(),cgenClassTable);
+        for (Enumeration e = cn.getChildren(); e.hasMoreElements(); ) {
+            emitMethodCodeForTree(s, (CgenNode) e.nextElement(), cgenClassTable);
         }
     }
 
-    static void emitMethodPre(PrintStream s){
-        emitPush(FP,s);
-        emitPush(SELF,s);
-        emitPush(RA,s);
-        emitAddiu(FP,SP,4,s);
-        emitMove(SELF,ACC,s);
+    static void emitMethodPre(PrintStream s) {
+        emitPush(FP, s);
+        emitPush(SELF, s);
+        emitPush(RA, s);
+        emitAddiu(FP, SP, 4, s);
+        emitMove(SELF, ACC, s);
     }
 
-    static void emitMethodEnd(PrintStream s){
-        emitLoad(FP,12,SP,s);
-        emitLoad(SELF,8,SP,s);
-        emitLoad(RA,4,SP,s);
-        emitAddiu(SP,SP,12,s);
+    static void emitMethodEnd(PrintStream s) {
+        emitLoad(FP, 12, SP, s);
+        emitLoad(SELF, 8, SP, s);
+        emitLoad(RA, 4, SP, s);
+        emitAddiu(SP, SP, 12, s);
         emitReturn(s);
     }
 
-    static void emitMethodCode(PrintStream s, method f, CgenClassTable classTable, CgenNode cn){
-        cn.idTableEnterscope();
+    static void emitMethodCode(PrintStream s, method f, CgenClassTable classTable, CgenNode cn) {
+        cn.idTableEnterScope();
         int index = 0;
-        for (Enumeration e = f.formals.getElements(); e.hasMoreElements(); ){
-            cn.idTableAddID(((formalc)e.nextElement()).getName(),index++);
+        for (Enumeration e = f.formals.getElements(); e.hasMoreElements(); ) {
+            cn.idTableAddID(((formalc) e.nextElement()).getName(), index++);
         }
-        emitMethodRef(cn.getName(),f.getName(),s);
+        emitMethodRef(cn.getName(), f.getName(), s);
         emitMethodPre(s);
-        f.expr.code(s,classTable,cn);
+        f.expr.code(s, classTable, cn);
         emitMethodEnd(s);
-        cn.idTableExitscope();
+        cn.idTableExitScope();
     }
 
-    static void emitOneAttrAssignCode(PrintStream s, attr a, CgenNode cn, CgenClassTable cgenClassTable){
-        a.init.code(s,cgenClassTable,cn);
-        emitStore(ACC, cn.getAttrOffset(a.getName()), SELF,s);
+    static void emitOneAttrAssignCode(PrintStream s, attr a, CgenNode cn, CgenClassTable cgenClassTable) {
+        a.init.code(s, cgenClassTable, cn);
+        emitStore(ACC, cn.getAttrOffset(a.getName()), SELF, s);
     }
 
 }

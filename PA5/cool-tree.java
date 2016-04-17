@@ -632,7 +632,9 @@ class formalc extends Formal {
         dump_AbstractSymbol(out, n + 2, type_decl);
     }
 
-    public AbstractSymbol getName(){return this.name;}
+    public AbstractSymbol getName() {
+        return this.name;
+    }
 }
 
 
@@ -729,7 +731,8 @@ class assign extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -809,7 +812,8 @@ class static_dispatch extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -909,7 +913,8 @@ class dispatch extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1003,7 +1008,8 @@ class cond extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1076,7 +1082,8 @@ class loop extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1148,7 +1155,8 @@ class typcase extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1202,7 +1210,8 @@ class block extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1273,7 +1282,8 @@ class let extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1334,7 +1344,8 @@ class plus extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1407,7 +1418,8 @@ class sub extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1480,7 +1492,8 @@ class mul extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1551,7 +1564,8 @@ class divide extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1619,7 +1633,8 @@ class neg extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1684,7 +1699,8 @@ class lt extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1763,7 +1779,8 @@ class eq extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1840,7 +1857,8 @@ class leq extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1914,7 +1932,8 @@ class comp extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -1984,7 +2003,8 @@ class int_const extends Expression {
     /**
      * Generates code for this expression.  This method method is provided
      * to you as an example of code generation.
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -2037,7 +2057,8 @@ class bool_const extends Expression {
     /**
      * Generates code for this expression.  This method method is provided
      * to you as an example of code generation.
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -2091,7 +2112,8 @@ class string_const extends Expression {
     /**
      * Generates code for this expression.  This method method is provided
      * to you as an example of code generation.
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -2145,7 +2167,8 @@ class new_ extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -2201,7 +2224,8 @@ class isvoid extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -2260,7 +2284,8 @@ class no_expr extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -2312,7 +2337,8 @@ class object extends Expression {
      * Generates code for this expression.  This method is to be completed
      * in programming assignment 5.  (You may add or remove parameters as
      * you wish.)
-     *  @param s          the output stream
+     *
+     * @param s          the output stream
      * @param classTable
      * @param cn
      */
@@ -2321,13 +2347,13 @@ class object extends Expression {
         if (this.name == TreeConstants.self) {
             CgenSupport.emitMove(CgenSupport.ACC, CgenSupport.SELF, s);
         } else {
-            if (cn.getIdLocation(this.name) == CgenSupport.ATTR) {
+            if (cn.idTableLookUpLocation(this.name) == CgenSupport.ATTR) {
                 AbstractSymbol currClassType = cn.getName();
                 CgenNode c = (CgenNode) classTable.lookup(currClassType);
                 int attrOffset = c.getAttrOffset(this.name);
                 CgenSupport.emitLoad(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
-            } else if (cn.getIdLocation(this.name) == CgenSupport.PARAM) {
-                int frameOffset = cn.getOffset(this.name);
+            } else if (cn.idTableLookUpLocation(this.name) == CgenSupport.PARAM) {
+                int frameOffset = cn.idTableGetOffset(this.name);
                 CgenSupport.emitLoad(CgenSupport.ACC, frameOffset, CgenSupport.FP, s);
             } else {
 

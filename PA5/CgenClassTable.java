@@ -430,23 +430,23 @@ class CgenClassTable extends SymbolTable {
         parent.addChild(nd);
     }
 
-    public void codeClassNameTab(){
+    public void codeClassNameTab() {
         CgenSupport.emitClassNameTabLabel(str);
         for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
-            CgenSupport.emitClassNameTabBlock(str,(CgenNode)e.nextElement());
+            CgenSupport.emitClassNameTabBlock(str, (CgenNode) e.nextElement());
         }
     }
 
-    public void codeClassObjTab(){
+    public void codeClassObjTab() {
         CgenSupport.emitClassObjTabLabel(str);
         for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
-            CgenSupport.emitClassObjTabBlock(str,(CgenNode)e.nextElement());
+            CgenSupport.emitClassObjTabBlock(str, (CgenNode) e.nextElement());
         }
     }
 
-    public void codeDispTab(){
+    public void codeDispTab() {
         for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
-            CgenSupport.emitDispTabForSingleClass(str,(CgenNode)e.nextElement());
+            CgenSupport.emitDispTabForSingleClass(str, (CgenNode) e.nextElement());
         }
     }
 
@@ -500,7 +500,6 @@ class CgenClassTable extends SymbolTable {
     }
 
 
-
     /**
      * This method is the meat of the code generator.  It is to be
      * filled in programming assignment 5
@@ -549,23 +548,23 @@ class CgenClassTable extends SymbolTable {
         codeClassMethod();
     }
 
-    public void codeClassMethod(){
-        CgenSupport.emitMethodCodeForTree(str,this.root(),this);
+    public void codeClassMethod() {
+        CgenSupport.emitMethodCodeForTree(str, this.root(), this);
     }
 
     /**
      * Code class initalizer
      */
-    public void codeClassInitalizer(){
-        CgenSupport.emitClassInitForTree(str,this.root(),this);
+    public void codeClassInitalizer() {
+        CgenSupport.emitClassInitForTree(str, this.root(), this);
     }
 
     /**
      * Code ProtObj for all classes
      */
-    public void codeProtObj(){
+    public void codeProtObj() {
         for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
-            CgenSupport.emitProtObjForSingleClass(str,(CgenNode)e.nextElement(),this);
+            CgenSupport.emitProtObjForSingleClass(str, (CgenNode) e.nextElement(), this);
         }
     }
 
@@ -579,30 +578,30 @@ class CgenClassTable extends SymbolTable {
     /**
      * constructor
      */
-    private void constructFeaturesTabsFromRoots(){
+    private void constructFeaturesTabsFromRoots() {
         constructFeatureTabs(this.root());
     }
 
     /**
      * Construct featureTabs in each cgenNode
      */
-    private void constructFeatureTabs(CgenNode cn){
+    private void constructFeatureTabs(CgenNode cn) {
         cn.constructFeatureTabs();
-        for(Enumeration e = cn.getChildren(); e.hasMoreElements(); ){
+        for (Enumeration e = cn.getChildren(); e.hasMoreElements(); ) {
             constructFeatureTabs((CgenNode) e.nextElement());
         }
     }
 
-    public Vector getTable(){
+    public Vector getTable() {
         return this.nds;
     }
 
-    public Boolean isPremitive(AbstractSymbol typename){
-        int i = ((CgenNode)this.lookup(typename)).getTag(nds);
-        return (i==this.stringclasstag)||(i==this.boolclasstag)||(i==this.intclasstag);
+    public Boolean isPremitive(AbstractSymbol typename) {
+        int i = ((CgenNode) this.lookup(typename)).getTag(nds);
+        return (i == this.stringclasstag) || (i == this.boolclasstag) || (i == this.intclasstag);
     }
 
-    public int getTag(CgenNode cn){
+    public int getTag(CgenNode cn) {
         return this.nds.indexOf(cn);
     }
 
