@@ -1101,6 +1101,7 @@ class loop extends Expression {
         CgenSupport.emitBranch(whileLabel, s);
 
         CgenSupport.emitLabelDef(whileEndLabel, s);
+        CgenSupport.emitMove(CgenSupport.ACC, CgenSupport.ZERO, s);
         CgenSupport.emitComment("Finish while", s);
     }
 
