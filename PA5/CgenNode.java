@@ -237,7 +237,8 @@ class CgenNode extends class_c {
 
     public boolean containsMethod(method m) {
         for (Enumeration<method> e = getMethodElement(); e.hasMoreElements(); ) {
-            if (e.nextElement().getName() == m.getName()) {
+            method tem = e.nextElement();
+            if (tem.getName() == m.getName()) {
                 return true;
             }
         }

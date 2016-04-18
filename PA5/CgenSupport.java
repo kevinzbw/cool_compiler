@@ -852,7 +852,8 @@ class CgenSupport {
         if (!cn.basic()) {
             for (Enumeration e = cn.getMethodElement(); e.hasMoreElements(); ) {
                 method m = (method) e.nextElement();
-                if (!cn.getParentNd().containsMethod(m)) {
+                if (!cn.getParentNd().containsMethod(m)
+                        || cn.getMethodClassPrefix(m)!=cn.getParentNd().getMethodClassPrefix(m)) {
                     emitMethodCode(s, m, cgenClassTable, cn);
                 }
             }
