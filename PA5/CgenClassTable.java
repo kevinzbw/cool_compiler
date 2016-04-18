@@ -458,9 +458,9 @@ class CgenClassTable extends SymbolTable {
 
         this.str = str;
 
-        intclasstag = 3  /* Change to your Int class tag here */;
-        boolclasstag = 4  /* Change to your Bool class tag here */;
-        stringclasstag = 5 /* Change to your String class tag here */;
+        intclasstag = 2  /* Change to your Int class tag here */;
+        boolclasstag = 3  /* Change to your Bool class tag here */;
+        stringclasstag = 4 /* Change to your String class tag here */;
 
         enterScope();
         if (Flags.cgen_debug) System.out.println("Building CgenClassTable");

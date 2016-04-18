@@ -57,9 +57,9 @@ class CgenNode extends class_c {
      * Dispatch System
      * Feature Table for the class
      */
-    private Vector<method> methodTab;
     private HashMap<method, AbstractSymbol> nameToClassMap;
     private Vector<attr> attrTab;
+    private Vector<method> methodTab;
 
     //Check ID
     private identifierTable idTable;
@@ -139,7 +139,7 @@ class CgenNode extends class_c {
         for (Enumeration e = this.features.getElements(); e.hasMoreElements(); ) {
             Feature f = (Feature) e.nextElement();
 
-            if (f.getClass() == (new attr(0, null, null, null)).getClass()) {
+            if (f instanceof attr) {
                 /** e is Attr */
                 attrTab.addElement((attr) f);
                 this.idTable.addId(((attr) f).getName(), attrTab.indexOf(f));
@@ -180,7 +180,7 @@ class CgenNode extends class_c {
         return this.methodTab.elements();
     }
 
-    public AbstractSymbol getMethodClassPrefix(AbstractSymbol methodname) {
+    public AbstractSymbol getMethodClassPrefix(method methodname) {
         return this.nameToClassMap.get(methodname);
     }
 
@@ -190,8 +190,16 @@ class CgenNode extends class_c {
      * @return offset
      */
 
-    Integer getMethodOffset(AbstractSymbol method) {
-        return this.methodTab.indexOf(method);
+    int getMethodIndex(method m) {
+        return this.methodTab.indexOf(m);
+    }
+
+    int getMethodOffset(AbstractSymbol name) {
+        for (Enumeration<method> e = this.getMethodElement(); e.hasMoreElements(); ) {
+            method m = e.nextElement();
+            if (m.getName() == name) return getMethodIndex(m);
+        }
+        return -1;
     }
 
     /**
@@ -199,8 +207,17 @@ class CgenNode extends class_c {
      *
      * @return offset
      */
-    Integer getAttrOffset(AbstractSymbol attr) {
-        return this.attrTab.indexOf(attr);
+    int getAttrIndex(attr att) {
+        return this.attrTab.indexOf(att);
+
+    }
+
+    int getAttrOffset(AbstractSymbol name) {
+        for (Enumeration<attr> e = this.getAttrElement(); e.hasMoreElements(); ) {
+            attr a = e.nextElement();
+            if (a.getName() == name) return getAttrIndex(a) + 3;
+        }
+        return -1;
     }
 
     /**
@@ -216,6 +233,15 @@ class CgenNode extends class_c {
 
     public Enumeration getAttrElement() {
         return this.attrTab.elements();
+    }
+
+    public boolean containsMethod(method m) {
+        for (Enumeration<method> e = getMethodElement(); e.hasMoreElements(); ) {
+            if (e.nextElement().getName() == m.getName()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

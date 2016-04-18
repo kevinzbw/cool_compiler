@@ -21,7 +21,6 @@ PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 // This is a project skeleton file
 
-import org.omg.CORBA.INITIALIZE;
 
 import java.io.PrintStream;
 import java.util.Enumeration;
@@ -138,6 +137,7 @@ class CgenSupport {
     // location of identifierTable
     final static int ATTR = 0;
     final static int PARAM = 1;
+
 
     /**
      * Emits an LW instruction.
@@ -778,8 +778,8 @@ class CgenSupport {
     static void emitDispTabForSingleClass(PrintStream s, CgenNode cn) {
         s.print(cn.getName() + DISPTAB_SUFFIX + LABEL);
         for (Enumeration e = cn.getMethodElement(); e.hasMoreElements(); ) {
-            AbstractSymbol methodName = ((method) e.nextElement()).getName();
-            s.println(WORD + cn.getMethodClassPrefix(methodName) + METHOD_SEP + methodName);
+            method m = (method) e.nextElement();
+            s.println(WORD + cn.getMethodClassPrefix(m) + METHOD_SEP + m.getName());
         }
     }
 
@@ -790,7 +790,7 @@ class CgenSupport {
 
         // protObj Label
         emitProtObjRef(cn.getName(), s);
-        s.println("");
+        s.println(":");
 
         // .word classTag
         s.println(WORD + cn.getTag(cgenClassTable.getTable()));
@@ -801,6 +801,7 @@ class CgenSupport {
         // .word dispTab
         s.print(WORD);
         emitDispTableRef(cn.getName(), s);
+        s.println("");
 
         // AttrBlock
         emitAttrBlock(s, cn, cgenClassTable);
@@ -810,7 +811,7 @@ class CgenSupport {
     static void emitAttrBlock(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable) {
         for (Enumeration e = cn.getAttrElement(); e.hasMoreElements(); ) {
             attr a = (attr) e.nextElement();
-            s.println(WORD);
+            s.print(WORD);
             emitAttrInit(s, a, cgenClassTable);
             s.println("");
         }
@@ -821,14 +822,14 @@ class CgenSupport {
             /** NOT premitive type */
             s.print("0");
         } else {
-            if (a.type_decl.equals(TreeConstants.Str)) s.print(STRCONST_PREFIX + AbstractTable.stringtable.lookup(""));
+            if (a.type_decl.equals(TreeConstants.Str)) ((StringSymbol) AbstractTable.stringtable.lookup("")).codeRef(s);
             if (a.type_decl.equals(TreeConstants.Bool)) s.print(BOOLCONST_PREFIX + "0");
-            if (a.type_decl.equals(TreeConstants.Int)) s.print(INTCONST_PREFIX + AbstractTable.inttable.lookup("0"));
+            if (a.type_decl.equals(TreeConstants.Int)) ((IntSymbol) AbstractTable.inttable.lookup("0")).codeRef(s);
         }
     }
 
     static void emitClassInitForTree(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable) {
-        s.println(cn.getName() + CLASSINIT_SUFFIX);
+        s.println(cn.getName() + CLASSINIT_SUFFIX + ":");
         emitInitMethodCode(s, cn, cgenClassTable);
         for (Enumeration e = cn.getChildren(); e.hasMoreElements(); ) {
             emitClassInitForTree(s, (CgenNode) e.nextElement(), cgenClassTable);
@@ -841,14 +842,20 @@ class CgenSupport {
             emitJal(cn.getParent() + CLASSINIT_SUFFIX, s);
         }
         for (Enumeration<attr> e = cn.getAttrElement(); e.hasMoreElements(); ) {
-            emitOneAttrAssignCode(s, (attr) e, cn, cgenClassTable);
+            emitOneAttrAssignCode(s, e.nextElement(), cn, cgenClassTable);
         }
+        emitMove(ACC, SELF, s);
         emitMethodEnd(s);
     }
 
     static void emitMethodCodeForTree(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable) {
-        for (Enumeration e = cn.getMethodElement(); e.hasMoreElements(); ) {
-            emitMethodCode(s, (method) e.nextElement(), cgenClassTable, cn);
+        if (!cn.basic()) {
+            for (Enumeration e = cn.getMethodElement(); e.hasMoreElements(); ) {
+                method m = (method) e.nextElement();
+                if (!cn.getParentNd().containsMethod(m)) {
+                    emitMethodCode(s, m, cgenClassTable, cn);
+                }
+            }
         }
         for (Enumeration e = cn.getChildren(); e.hasMoreElements(); ) {
             emitMethodCodeForTree(s, (CgenNode) e.nextElement(), cgenClassTable);
@@ -856,17 +863,18 @@ class CgenSupport {
     }
 
     static void emitMethodPre(PrintStream s) {
-        emitPush(FP, s);
-        emitPush(SELF, s);
-        emitPush(RA, s);
-        emitAddiu(FP, SP, 4, s);
+        emitAddiu(SP, SP, -12, s);
+        emitStore(FP, 3, SP, s);
+        emitStore(SELF, 2, SP, s);
+        emitStore(RA, 1, SP, s);
+        emitAddiu(FP, SP, 16, s);
         emitMove(SELF, ACC, s);
     }
 
     static void emitMethodEnd(PrintStream s) {
-        emitLoad(FP, 12, SP, s);
-        emitLoad(SELF, 8, SP, s);
-        emitLoad(RA, 4, SP, s);
+        emitLoad(FP, 3, SP, s);
+        emitLoad(SELF, 2, SP, s);
+        emitLoad(RA, 1, SP, s);
         emitAddiu(SP, SP, 12, s);
         emitReturn(s);
     }
@@ -878,6 +886,7 @@ class CgenSupport {
             cn.idTableAddID(((formalc) e.nextElement()).getName(), index++);
         }
         emitMethodRef(cn.getName(), f.getName(), s);
+        s.println(":");
         emitMethodPre(s);
         f.expr.code(s, classTable, cn);
         emitMethodEnd(s);
@@ -885,8 +894,13 @@ class CgenSupport {
     }
 
     static void emitOneAttrAssignCode(PrintStream s, attr a, CgenNode cn, CgenClassTable cgenClassTable) {
-        a.init.code(s, cgenClassTable, cn);
-        emitStore(ACC, cn.getAttrOffset(a.getName()), SELF, s);
+//        emitComment("!!!!!!" + a.getName(), s);
+//        emitComment("!!!!!!" + a.init.get_type(), s);
+
+        if (a.init.get_type() != null) {
+            a.init.code(s, cgenClassTable, cn);
+            emitStore(ACC, cn.getAttrOffset(a.getName()), SELF, s);
+        }
     }
 
 }

@@ -742,9 +742,9 @@ class assign extends Expression {
         expr.code(s, classTable, cn);
         // TODO: 4/15/16 1.pair identifier to class type 2.attr or let or (1+2) or (New) or param
         // TODO: 4/15/16 Only handle attr
-        CgenNode c = (CgenNode) classTable.lookup(name);
-        int attrOffset = c.getAttrOffset(name);
-        CgenSupport.emitStore(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
+//        CgenNode c = (CgenNode) classTable.lookup(name);
+//        int attrOffset = c.getAttrOffset(name);
+//        CgenSupport.emitStore(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
 
         CgenSupport.emitComment("Finish assign", s);
     }
@@ -821,15 +821,15 @@ class static_dispatch extends Expression {
         AbstractSymbol exprType = this.type_name;
 
         // TODO: 4/15/16 let
-        CgenSupport.emitComment("Begin dispatch" + exprType + "." + this.name, s);
+        CgenSupport.emitComment("Start dispatch " + exprType + "." + this.name, s);
 
 
         for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
             Expression arg = (Expression) en.nextElement();
-            CgenSupport.emitComment("Evaluate and push" + arg.get_type(), s);
+            CgenSupport.emitComment("Evaluate and push " + arg.get_type(), s);
             arg.code(s, classTable, cn);
             CgenSupport.emitPush(CgenSupport.ACC, s);
-            CgenSupport.emitComment("Done" + arg.get_type(), s);
+            CgenSupport.emitComment("Done " + arg.get_type(), s);
         }
 
         expr.code(s, classTable, cn);
@@ -852,7 +852,7 @@ class static_dispatch extends Expression {
         for (Enumeration en = actual.getElements(); en.hasMoreElements(); en.nextElement()) {
             CgenSupport.emitPop(s);
         }
-        CgenSupport.emitComment("Finish dispatch" + exprType + "." + this.name, s);
+        CgenSupport.emitComment("Finish dispatch " + exprType + "." + this.name, s);
     }
 
 
@@ -924,14 +924,14 @@ class dispatch extends Expression {
             exprType = cn.getName();
         }
         // TODO: 4/15/16 let
-        CgenSupport.emitComment("Begin dispatch" + exprType + "." + this.name, s);
+        CgenSupport.emitComment("Start dispatch " + exprType + "." + this.name, s);
 
         for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
             Expression arg = (Expression) en.nextElement();
-            CgenSupport.emitComment("Evaluate and push" + arg.get_type(), s);
+            CgenSupport.emitComment("Evaluate and push " + arg.get_type(), s);
             arg.code(s, classTable, cn);
             CgenSupport.emitPush(CgenSupport.ACC, s);
-            CgenSupport.emitComment("Done" + arg.get_type(), s);
+            CgenSupport.emitComment("Done " + arg.get_type(), s);
         }
 
         expr.code(s, classTable, cn);
@@ -951,7 +951,7 @@ class dispatch extends Expression {
         CgenSupport.emitLoad(CgenSupport.T1, methodOffset, CgenSupport.T1, s);
         CgenSupport.emitJalr(CgenSupport.T1, s);
 
-        CgenSupport.emitComment("Finish dispatch" + exprType + "." + this.name, s);
+        CgenSupport.emitComment("Finish dispatch " + exprType + "." + this.name, s);
     }
 
 
@@ -1101,6 +1101,7 @@ class loop extends Expression {
         CgenSupport.emitBranch(whileLabel, s);
 
         CgenSupport.emitLabelDef(whileEndLabel, s);
+        CgenSupport.emitMove(CgenSupport.ACC, CgenSupport.ZERO, s);
         CgenSupport.emitComment("Finish while", s);
     }
 
@@ -1727,7 +1728,7 @@ class lt extends Expression {
         CgenSupport.emitLabelDef(labelEnd, s);
 
         CgenSupport.emitPop(s);
-        CgenSupport.emitComment("Start less than", s);
+        CgenSupport.emitComment("Finish less than", s);
     }
 
 
@@ -1885,7 +1886,7 @@ class leq extends Expression {
         CgenSupport.emitLabelDef(labelEnd, s);
 
         CgenSupport.emitPop(s);
-        CgenSupport.emitComment("Start less than or equal", s);
+        CgenSupport.emitComment("Finish less than or equal", s);
     }
 
 
@@ -1944,6 +1945,7 @@ class comp extends Expression {
         CgenSupport.emitLoadIntBoolObjVal(CgenSupport.T1, CgenSupport.ACC, s);
 
         CgenSupport.emitLoadBool(CgenSupport.T2, BoolConst.truebool, s);
+        CgenSupport.emitLoadIntBoolObjVal(CgenSupport.T2, CgenSupport.T2, s);
 
         int labelTrue = CgenSupport.getNewLabelNumber();
         int labelEnd = CgenSupport.getNewLabelNumber();
@@ -2234,15 +2236,13 @@ class isvoid extends Expression {
         e1.code(s, classTable, cn);
 
         int labelTrue = CgenSupport.getNewLabelNumber();
-        int labelFalse = CgenSupport.getNewLabelNumber();
 
-        CgenSupport.emitBeq(CgenSupport.ACC, CgenSupport.ZERO, labelTrue, s);
-
-        CgenSupport.emitLabelDef(labelFalse, s);
+        CgenSupport.emitMove(CgenSupport.T1, CgenSupport.ACC, s);
+        CgenSupport.emitLoadBool(CgenSupport.ACC, BoolConst.truebool, s);
+        CgenSupport.emitBeqz(CgenSupport.T1, labelTrue, s);
         CgenSupport.emitLoadBool(CgenSupport.ACC, BoolConst.falsebool, s);
 
         CgenSupport.emitLabelDef(labelTrue, s);
-        CgenSupport.emitLoadBool(CgenSupport.ACC, BoolConst.truebool, s);
         CgenSupport.emitComment("Finish isvoid", s);
     }
 
@@ -2348,15 +2348,17 @@ class object extends Expression {
             CgenSupport.emitMove(CgenSupport.ACC, CgenSupport.SELF, s);
         } else {
             if (cn.idTableLookUpLocation(this.name) == CgenSupport.ATTR) {
+                CgenSupport.emitComment("Attr", s);
                 AbstractSymbol currClassType = cn.getName();
                 CgenNode c = (CgenNode) classTable.lookup(currClassType);
                 int attrOffset = c.getAttrOffset(this.name);
                 CgenSupport.emitLoad(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
             } else if (cn.idTableLookUpLocation(this.name) == CgenSupport.PARAM) {
+                CgenSupport.emitComment("Method", s);
                 int frameOffset = cn.idTableGetOffset(this.name);
                 CgenSupport.emitLoad(CgenSupport.ACC, frameOffset, CgenSupport.FP, s);
             } else {
-
+                CgenSupport.emitComment("Let", s);
             }
         }
         CgenSupport.emitComment("Finish object:" + this.name, s);
