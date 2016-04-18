@@ -54,16 +54,6 @@ class CgenNode extends class_c {
     private int basic_status;
 
     /**
-     * Map from method to offset.
-     */
-    private Map<AbstractSymbol, Integer> methodOffset;
-
-    /**
-     * Map from attr to offset.
-     */
-    private Map<AbstractSymbol, Integer> attrOffset;
-
-    /**
      * Dispatch System
      * Feature Table for the class
      */
@@ -71,7 +61,7 @@ class CgenNode extends class_c {
     private HashMap<method, AbstractSymbol> nameToClassMap;
     private Vector<attr> attrTab;
 
-    //Check the location of id
+    //Check ID
     private identifierTable idTable;
 
     /**
@@ -142,14 +132,6 @@ class CgenNode extends class_c {
         return basic_status == Basic;
     }
 
-    public int getIdLocation(AbstractSymbol name) {
-        return idTable.lookupLocation(name);
-    }
-
-    public int getOffset(AbstractSymbol name) {
-        return (Integer) idTable.lookup(name);
-    }
-
     public void constructFeatureTabs() {
         this.methodTab = parent.cloneMethodTab();
         this.nameToClassMap = parent.cloneNameToClassMap();
@@ -160,7 +142,7 @@ class CgenNode extends class_c {
             if (f.getClass() == (new attr(0, null, null, null)).getClass()) {
                 /** e is Attr */
                 attrTab.addElement((attr) f);
-                this.idTable.addId(((attr) f).getName(),attrTab.indexOf(f));
+                this.idTable.addId(((attr) f).getName(), attrTab.indexOf(f));
             } else {
                 /** e is Method */
                 if (isOverrideMethod(((method) f).getName())) {
@@ -236,22 +218,29 @@ class CgenNode extends class_c {
         return this.attrTab.elements();
     }
 
-    public void idTableEnterscope(){
-        this.idTable.enterScope();
+
+    public void idTableAddID(AbstractSymbol id, int index) {
+        this.idTable.addId(id, index);
     }
 
-    public void idTableExitscope(){
-        this.idTable.exitScope();
+    public int idTableLookUpLocation(AbstractSymbol id) {
+        return this.idTable.lookupLocation(id);
     }
 
-    public void idTableAddID(AbstractSymbol id, int index){
-        this.idTable.addId(id,index);
+    public int idTableGetOffset(AbstractSymbol name) {
+        return (Integer) idTable.lookup(name);
     }
 
-    public int idTableLookUpLocation(AbstractSymbol id){
-       return this.idTable.lookupLocation(id);
+    public void idTableEnterScope() {
+        idTable.enterScope();
     }
 
+    public void idTableExitScope() {
+        idTable.exitScope();
+    }
 
+    public void idTableAddID(AbstractSymbol name, Integer offset) {
+        idTable.addId(name, offset);
+    }
 
 }

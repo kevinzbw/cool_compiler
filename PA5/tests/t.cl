@@ -17,6 +17,9 @@ class B inherits A {
 class Main inherits IO {
 	a:B <- new B;
   main():Object {
-    a.g()
+    hhh()
+  };
+  hhh():Int {
+  	1
   };
 };
