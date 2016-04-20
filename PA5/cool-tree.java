@@ -740,12 +740,22 @@ class assign extends Expression {
         CgenSupport.emitComment("Start assign", s);
 
         expr.code(s, classTable, cn);
-        // TODO: 4/15/16 1.pair identifier to class type 2.attr or let or (1+2) or (New) or param
-        // TODO: 4/15/16 Only handle attr
-//        CgenNode c = (CgenNode) classTable.lookup(name);
-//        int attrOffset = c.getAttrOffset(name);
-//        CgenSupport.emitStore(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
-
+        // TODO: 4/20/16 test GenGC model, assign
+        if (cn.idTableLookUpLocation(name) == CgenSupport.ATTR) {
+            int attrOffset = cn.getAttrOffset(name);
+            CgenSupport.emitStore(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
+            // garbage collect
+            if (Flags.cgen_Memmgr != Flags.GC_NOGC) {
+                CgenSupport.emitAddiu(CgenSupport.A1, CgenSupport.SELF, attrOffset,s);
+                CgenSupport.emitJal("_GenGC_Assign", s);
+            }
+        } else if (cn.idTableLookUpLocation(name) == CgenSupport.PARAM) {
+            int frameOffset = cn.idTableGetOffset(name);
+            CgenSupport.emitStore(CgenSupport.ACC, frameOffset, CgenSupport.FP, s);
+        } else {
+            int letOffset = cn.idTableGetOffset(name);
+            CgenSupport.emitStore(CgenSupport.ACC, letOffset, CgenSupport.SP, s);
+        }
         CgenSupport.emitComment("Finish assign", s);
     }
 
@@ -1291,8 +1301,10 @@ class let extends Expression {
     public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         // TODO: 4/16/16 let_code
         CgenSupport.emitComment("Start let", s);
-        //cn.idTableEnterScope();
-        //init.code(s, classTable, cn);
+        cn.idTableEnterScope();
+        init.code(s, classTable, cn);
+
+        cn.idTableExitScope();
         CgenSupport.emitComment("Finish let", s);
     }
 
@@ -2349,9 +2361,7 @@ class object extends Expression {
         } else {
             if (cn.idTableLookUpLocation(this.name) == CgenSupport.ATTR) {
                 CgenSupport.emitComment("Attr", s);
-                AbstractSymbol currClassType = cn.getName();
-                CgenNode c = (CgenNode) classTable.lookup(currClassType);
-                int attrOffset = c.getAttrOffset(this.name);
+                int attrOffset = cn.getAttrOffset(this.name);
                 CgenSupport.emitLoad(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
             } else if (cn.idTableLookUpLocation(this.name) == CgenSupport.PARAM) {
                 CgenSupport.emitComment("Method", s);

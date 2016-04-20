@@ -818,7 +818,7 @@ class CgenSupport {
     }
 
     static void emitAttrInit(PrintStream s, attr a, CgenClassTable cgenClassTable) {
-        if (!cgenClassTable.isPremitive(a.type_decl)) {
+        if (!cgenClassTable.isPrimitive(a.type_decl)) {
             /** NOT premitive type */
             s.print("0");
         } else {

@@ -596,7 +596,7 @@ class CgenClassTable extends SymbolTable {
         return this.nds;
     }
 
-    public Boolean isPremitive(AbstractSymbol typename) {
+    public Boolean isPrimitive(AbstractSymbol typename) {
         int i = ((CgenNode) this.lookup(typename)).getTag(nds);
         return (i == this.stringclasstag) || (i == this.boolclasstag) || (i == this.intclasstag);
     }
