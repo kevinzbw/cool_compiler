@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4de779ed-bbf6-43e5-b916-b992b4265c88" name="Default" comment="April20-add let, add let id,pass test 1,2,3,4">
+    <list default="true" id="4de779ed-bbf6-43e5-b916-b992b4265c88" name="Default" comment="April21-add case, TODO: parentTab">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CgenNode.java" afterPath="$PROJECT_DIR$/CgenNode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CgenSupport.java" afterPath="$PROJECT_DIR$/CgenSupport.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cool-tree.java" afterPath="$PROJECT_DIR$/cool-tree.java" />
     </list>
     <ignored path="PA5.iws" />
@@ -38,8 +36,8 @@
       <file leaf-file-name="CgenClassTable.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CgenClassTable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="598" column="20" selection-start-line="598" selection-start-column="20" selection-end-line="598" selection-end-column="20" />
+            <state relative-caret-position="289">
+              <caret line="594" column="22" selection-start-line="594" selection-start-column="18" selection-end-line="594" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -48,7 +46,7 @@
       <file leaf-file-name="identifierTable.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/identifierTable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
+            <state relative-caret-position="-914">
               <caret line="18" column="33" selection-start-line="18" selection-start-column="33" selection-end-line="18" selection-end-column="33" />
               <folding />
             </state>
@@ -58,10 +56,13 @@
       <file leaf-file-name="CgenNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CgenNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="271" column="0" selection-start-line="271" selection-start-column="0" selection-end-line="271" selection-end-column="0" />
+            <state relative-caret-position="259">
+              <caret line="230" column="5" selection-start-line="230" selection-start-column="5" selection-end-line="230" selection-end-column="5" />
               <folding>
+                <element signature="e#0#7553#0" expanded="true" />
                 <element signature="imports" expanded="true" />
+                <element signature="e#6369#6370#0" expanded="true" />
+                <element signature="e#6409#6410#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -70,8 +71,8 @@
       <file leaf-file-name="CgenSupport.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CgenSupport.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-662">
-              <caret line="841" column="12" selection-start-line="841" selection-start-column="12" selection-end-line="841" selection-end-column="58" />
+            <state relative-caret-position="751">
+              <caret line="663" column="20" selection-start-line="663" selection-start-column="16" selection-end-line="663" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -82,21 +83,11 @@
       <file leaf-file-name="cool-tree.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cool-tree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3836">
-              <caret line="1356" column="42" selection-start-line="1356" selection-start-column="42" selection-end-line="1356" selection-end-column="42" />
+            <state relative-caret-position="-825">
+              <caret line="1213" column="25" selection-start-line="1213" selection-start-column="25" selection-end-line="1213" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="trap_handler.mars" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trap_handler.mars">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23445">
-              <caret line="1563" column="24" selection-start-line="1563" selection-start-column="12" selection-end-line="1563" selection-end-column="24" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -132,11 +123,11 @@
         <option value="$PROJECT_DIR$/IntSymbol.java" />
         <option value="$PROJECT_DIR$/identifierTable.java" />
         <option value="$PROJECT_DIR$/README" />
-        <option value="$PROJECT_DIR$/build.xml" />
         <option value="$PROJECT_DIR$/CgenClassTable.java" />
         <option value="$PROJECT_DIR$/CgenSupport.java" />
         <option value="$PROJECT_DIR$/CgenNode.java" />
         <option value="$PROJECT_DIR$/cool-tree.java" />
+        <option value="$PROJECT_DIR$/build.xml" />
       </list>
     </option>
   </component>
@@ -157,7 +148,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="40" />
-    <option name="y" value="106" />
+    <option name="y" value="58" />
     <option name="width" value="1400" />
     <option name="height" value="779" />
   </component>
@@ -648,7 +639,8 @@
       <workItem from="1460932864426" duration="255000" />
       <workItem from="1461133066541" duration="4212000" />
       <workItem from="1461192740034" duration="10978000" />
-      <workItem from="1461219873495" duration="3030000" />
+      <workItem from="1461219873495" duration="4399000" />
+      <workItem from="1461257891452" duration="3526000" />
     </task>
     <task id="LOCAL-00001" summary="before merge">
       <created>1460782568226</created>
@@ -706,11 +698,18 @@
       <option name="project" value="LOCAL" />
       <updated>1461215409392</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="April20-add let, add let identifier, pass tests 1,2,3,4">
+      <created>1461223152587</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1461223152587</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="91425000" />
+    <option name="totallyTimeSpent" value="96320000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -722,34 +721,34 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="40" y="106" width="1400" height="779" extended-state="0" />
+    <frame x="40" y="58" width="1400" height="779" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18287373" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16690856" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.09724238" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946298" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24815905" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896653" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2496318" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16421208" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16858238" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896653" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -799,7 +798,9 @@
     <MESSAGE value="April17-Kevin-CheckPoint Done" />
     <MESSAGE value="April20-LetID using SP" />
     <MESSAGE value="April20-fix dispatch bug, pass test 1,2,3" />
-    <option name="LAST_COMMIT_MESSAGE" value="April20-fix dispatch bug, pass test 1,2,3" />
+    <MESSAGE value="April20-add let, add let identifier, pass tests 1,2,3,4" />
+    <MESSAGE value="April21-add case, TODO: parentTab" />
+    <option name="LAST_COMMIT_MESSAGE" value="April21-add case, TODO: parentTab" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -828,7 +829,10 @@
         <state relative-caret-position="1875">
           <caret line="146" column="31" selection-start-line="146" selection-start-column="22" selection-end-line="146" selection-end-column="31" />
           <folding>
+            <element signature="e#0#7553#0" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="e#6369#6370#0" expanded="true" />
+            <element signature="e#6409#6410#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -902,7 +906,10 @@
         <state relative-caret-position="435">
           <caret line="52" column="37" selection-start-line="52" selection-start-column="37" selection-end-line="52" selection-end-column="37" />
           <folding>
+            <element signature="e#0#7553#0" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="e#6369#6370#0" expanded="true" />
+            <element signature="e#6409#6410#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -932,7 +939,10 @@
         <state relative-caret-position="435">
           <caret line="52" column="37" selection-start-line="52" selection-start-column="37" selection-end-line="52" selection-end-column="37" />
           <folding>
+            <element signature="e#0#7553#0" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="e#6369#6370#0" expanded="true" />
+            <element signature="e#6409#6410#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -962,7 +972,10 @@
         <state relative-caret-position="0">
           <caret line="52" column="37" selection-start-line="52" selection-start-column="37" selection-end-line="52" selection-end-column="37" />
           <folding>
+            <element signature="e#0#7553#0" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="e#6369#6370#0" expanded="true" />
+            <element signature="e#6409#6410#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1071,22 +1084,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="61" column="54" selection-start-line="61" selection-start-column="50" selection-end-line="61" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trap_handler.mars">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23445">
-          <caret line="1563" column="24" selection-start-line="1563" selection-start-column="12" selection-end-line="1563" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2280">
@@ -1102,27 +1099,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/3.cl.ref.s">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="24" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/3.cl.my.s">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-12458">
-          <caret line="2" column="25" selection-start-line="2" selection-start-column="25" selection-end-line="2" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/checkpoint.cl.out.my">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/3.cl.ref.s" />
+    <entry file="file://$PROJECT_DIR$/tests/3.cl.my.s" />
+    <entry file="file://$PROJECT_DIR$/tests/checkpoint.cl.out.my" />
     <entry file="file://$PROJECT_DIR$/Cgen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -1131,46 +1110,65 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trap_handler.mars">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="526">
+          <caret line="339" column="35" selection-start-line="339" selection-start-column="29" selection-end-line="339" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/identifierTable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
+        <state relative-caret-position="-914">
           <caret line="18" column="33" selection-start-line="18" selection-start-column="33" selection-end-line="18" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/CgenSupport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="751">
+          <caret line="663" column="20" selection-start-line="663" selection-start-column="16" selection-end-line="663" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/CgenClassTable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="598" column="20" selection-start-line="598" selection-start-column="20" selection-end-line="598" selection-end-column="20" />
+        <state relative-caret-position="289">
+          <caret line="594" column="22" selection-start-line="594" selection-start-column="18" selection-end-line="594" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CgenNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="271" column="0" selection-start-line="271" selection-start-column="0" selection-end-line="271" selection-end-column="0" />
+        <state relative-caret-position="259">
+          <caret line="230" column="5" selection-start-line="230" selection-start-column="5" selection-end-line="230" selection-end-column="5" />
           <folding>
+            <element signature="e#0#7553#0" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="e#6369#6370#0" expanded="true" />
+            <element signature="e#6409#6410#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CgenSupport.java">
+    <entry file="file://$PROJECT_DIR$/build.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-662">
-          <caret line="841" column="12" selection-start-line="841" selection-start-column="12" selection-end-line="841" selection-end-column="58" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="75">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cool-tree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3836">
-          <caret line="1356" column="42" selection-start-line="1356" selection-start-column="42" selection-end-line="1356" selection-end-column="42" />
+        <state relative-caret-position="-825">
+          <caret line="1213" column="25" selection-start-line="1213" selection-start-column="25" selection-end-line="1213" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
