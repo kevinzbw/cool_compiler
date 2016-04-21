@@ -64,6 +64,8 @@ class CgenNode extends class_c {
     //Check ID
     private identifierTable idTable;
 
+    private int numTempID = 0;
+
     /**
      * Constructs a new CgenNode to represent class "c".
      *
@@ -270,4 +272,7 @@ class CgenNode extends class_c {
         idTable.addId(name, offset);
     }
 
+    public void setNumTempID(int n) { this.numTempID = n; }
+
+    public int getNumTempID() { return this.numTempID; }
 }

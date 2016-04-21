@@ -227,6 +227,7 @@ abstract class Expression extends TreeNode {
 
     public abstract void code(PrintStream s, CgenClassTable classTable, CgenNode cn);
 
+    public abstract int countTempID();
 }
 
 
@@ -759,7 +760,10 @@ class assign extends Expression {
         CgenSupport.emitComment("Finish assign", s);
     }
 
-
+    @Override
+    public int countTempID() {
+        return expr.countTempID();
+    }
 }
 
 
@@ -859,13 +863,19 @@ class static_dispatch extends Expression {
         CgenSupport.emitLoad(CgenSupport.T1, methodOffset, CgenSupport.T1, s);
         CgenSupport.emitJalr(CgenSupport.T1, s);
 
-        for (Enumeration en = actual.getElements(); en.hasMoreElements(); en.nextElement()) {
-            CgenSupport.emitPop(s);
-        }
         CgenSupport.emitComment("Finish dispatch " + exprType + "." + this.name, s);
     }
 
-
+    @Override
+    public int countTempID() {
+        int sum = 0;
+        for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
+            Expression arg = (Expression) en.nextElement();
+            sum += arg.countTempID();
+        }
+        sum += expr.countTempID();
+        return sum;
+    }
 }
 
 
@@ -961,10 +971,22 @@ class dispatch extends Expression {
         CgenSupport.emitLoad(CgenSupport.T1, methodOffset, CgenSupport.T1, s);
         CgenSupport.emitJalr(CgenSupport.T1, s);
 
+//        for (Enumeration en = actual.getElements(); en.hasMoreElements(); en.nextElement()) {
+//            CgenSupport.emitPop(s);
+//        }
         CgenSupport.emitComment("Finish dispatch " + exprType + "." + this.name, s);
     }
 
-
+    @Override
+    public int countTempID() {
+        int sum = 0;
+        for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
+            Expression arg = (Expression) en.nextElement();
+            sum += arg.countTempID();
+        }
+        sum += expr.countTempID();
+        return sum;
+    }
 }
 
 
@@ -1043,6 +1065,11 @@ class cond extends Expression {
         CgenSupport.emitLabelDef(ifEndLabel, s);
         CgenSupport.emitComment("Finish cond", s);
     }
+
+    @Override
+    public int countTempID() {
+        return pred.countTempID() + then_exp.countTempID() + else_exp.countTempID();
+    }
 }
 
 
@@ -1115,7 +1142,10 @@ class loop extends Expression {
         CgenSupport.emitComment("Finish while", s);
     }
 
-
+    @Override
+    public int countTempID() {
+        return pred.countTempID() + body.countTempID();
+    }
 }
 
 
@@ -1176,6 +1206,11 @@ class typcase extends Expression {
     }
 
 
+    @Override
+    public int countTempID() {
+        // TODO: 4/20/16 case_count
+        return 0;
+    }
 }
 
 
@@ -1235,6 +1270,14 @@ class block extends Expression {
     }
 
 
+    @Override
+    public int countTempID() {
+        int sum = 0;
+        for (Enumeration e = body.getElements(); e.hasMoreElements(); ) {
+            sum += ((Expression) e.nextElement()).countTempID();
+        }
+        return sum;
+    }
 }
 
 
@@ -1308,6 +1351,10 @@ class let extends Expression {
         CgenSupport.emitComment("Finish let", s);
     }
 
+    @Override
+    public int countTempID() {
+        return 1 + init.countTempID() + body.countTempID();
+    }
 
 }
 
@@ -1383,6 +1430,11 @@ class plus extends Expression {
     }
 
 
+    @Override
+    public int countTempID() {
+        return e1.countTempID() + e2.countTempID();
+    }
+
 }
 
 
@@ -1456,7 +1508,10 @@ class sub extends Expression {
         CgenSupport.emitComment("Finish sub", s);
     }
 
-
+    @Override
+    public int countTempID() {
+        return e1.countTempID() + e2.countTempID();
+    }
 }
 
 
@@ -1528,6 +1583,11 @@ class mul extends Expression {
 
         CgenSupport.emitPop(s);
         CgenSupport.emitComment("Finish mul", s);
+    }
+
+    @Override
+    public int countTempID() {
+        return e1.countTempID() + e2.countTempID();
     }
 }
 
@@ -1602,7 +1662,10 @@ class divide extends Expression {
         CgenSupport.emitComment("Finish div", s);
     }
 
-
+    @Override
+    public int countTempID() {
+        return e1.countTempID() + e2.countTempID();
+    }
 }
 
 
@@ -1663,7 +1726,10 @@ class neg extends Expression {
         CgenSupport.emitComment("Finish negate", s);
     }
 
-
+    @Override
+    public int countTempID() {
+        return e1.countTempID();
+    }
 }
 
 
@@ -1743,7 +1809,10 @@ class lt extends Expression {
         CgenSupport.emitComment("Finish less than", s);
     }
 
-
+    @Override
+    public int countTempID() {
+        return e1.countTempID() + e2.countTempID();
+    }
 }
 
 
@@ -1821,7 +1890,10 @@ class eq extends Expression {
         CgenSupport.emitComment("Finish equal", s);
     }
 
-
+    @Override
+    public int countTempID() {
+        return e1.countTempID() + e2.countTempID();
+    }
 }
 
 
@@ -1901,7 +1973,10 @@ class leq extends Expression {
         CgenSupport.emitComment("Finish less than or equal", s);
     }
 
-
+    @Override
+    public int countTempID() {
+        return e1.countTempID() + e2.countTempID();
+    }
 }
 
 
@@ -1974,7 +2049,10 @@ class comp extends Expression {
         CgenSupport.emitComment("Finish not", s);
     }
 
-
+    @Override
+    public int countTempID() {
+        return e1.countTempID();
+    }
 }
 
 
@@ -2029,6 +2107,10 @@ class int_const extends Expression {
         CgenSupport.emitComment("Finish int_const", s);
     }
 
+    @Override
+    public int countTempID() {
+        return 0;
+    }
 }
 
 
@@ -2082,6 +2164,10 @@ class bool_const extends Expression {
         CgenSupport.emitComment("Finish bool_const", s);
     }
 
+    @Override
+    public int countTempID() {
+        return 0;
+    }
 }
 
 
@@ -2138,6 +2224,11 @@ class string_const extends Expression {
         CgenSupport.emitComment("Finish string_const", s);
     }
 
+
+    @Override
+    public int countTempID() {
+        return 0;
+    }
 }
 
 
@@ -2194,6 +2285,10 @@ class new_ extends Expression {
         CgenSupport.emitComment("Finish new", s);
     }
 
+    @Override
+    public int countTempID() {
+        return 0;
+    }
 
 }
 
@@ -2259,6 +2354,10 @@ class isvoid extends Expression {
     }
 
 
+    @Override
+    public int countTempID() {
+        return e1.countTempID();
+    }
 }
 
 
@@ -2305,7 +2404,10 @@ class no_expr extends Expression {
         // TODO: 4/16/16 no_code
     }
 
-
+    @Override
+    public int countTempID() {
+        return 0;
+    }
 }
 
 
@@ -2372,5 +2474,10 @@ class object extends Expression {
             }
         }
         CgenSupport.emitComment("Finish object:" + this.name, s);
+    }
+
+    @Override
+    public int countTempID() {
+        return 0;
     }
 }

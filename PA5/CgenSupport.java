@@ -845,7 +845,7 @@ class CgenSupport {
             emitOneAttrAssignCode(s, e.nextElement(), cn, cgenClassTable);
         }
         emitMove(ACC, SELF, s);
-        emitMethodEnd(s);
+        emitMethodEnd(s, null);
     }
 
     static void emitMethodCodeForTree(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable) {
@@ -854,6 +854,7 @@ class CgenSupport {
                 method m = (method) e.nextElement();
                 if (!cn.getParentNd().containsMethod(m)
                         || cn.getMethodClassPrefix(m)!=cn.getParentNd().getMethodClassPrefix(m)) {
+                    emitComment("Num let"+ m.getName() + " " + Integer.toString(m.expr.countTempID()), s);
                     emitMethodCode(s, m, cgenClassTable, cn);
                 }
             }
@@ -872,25 +873,26 @@ class CgenSupport {
         emitMove(SELF, ACC, s);
     }
 
-    static void emitMethodEnd(PrintStream s) {
+    static void emitMethodEnd(PrintStream s, method m) {
         emitLoad(FP, 3, SP, s);
         emitLoad(SELF, 2, SP, s);
         emitLoad(RA, 1, SP, s);
-        emitAddiu(SP, SP, 12, s);
+        if (m != null) emitAddiu(SP, SP, 12 + 4 * m.formals.getLength(), s);
+        else emitAddiu(SP, SP, 12, s);
         emitReturn(s);
     }
 
-    static void emitMethodCode(PrintStream s, method f, CgenClassTable classTable, CgenNode cn) {
+    static void emitMethodCode(PrintStream s, method m, CgenClassTable classTable, CgenNode cn) {
         cn.idTableEnterScope();
         int index = 0;
-        for (Enumeration e = f.formals.getElements(); e.hasMoreElements(); ) {
+        for (Enumeration e = m.formals.getElements(); e.hasMoreElements(); ) {
             cn.idTableAddID(((formalc) e.nextElement()).getName(), index++);
         }
-        emitMethodRef(cn.getName(), f.getName(), s);
+        emitMethodRef(cn.getName(), m.getName(), s);
         s.println(":");
         emitMethodPre(s);
-        f.expr.code(s, classTable, cn);
-        emitMethodEnd(s);
+        m.expr.code(s, classTable, cn);
+        emitMethodEnd(s, m);
         cn.idTableExitScope();
     }
 
