@@ -971,9 +971,6 @@ class dispatch extends Expression {
         CgenSupport.emitLoad(CgenSupport.T1, methodOffset, CgenSupport.T1, s);
         CgenSupport.emitJalr(CgenSupport.T1, s);
 
-//        for (Enumeration en = actual.getElements(); en.hasMoreElements(); en.nextElement()) {
-//            CgenSupport.emitPop(s);
-//        }
         CgenSupport.emitComment("Finish dispatch " + exprType + "." + this.name, s);
     }
 
@@ -1345,7 +1342,19 @@ class let extends Expression {
         // TODO: 4/16/16 let_code
         CgenSupport.emitComment("Start let", s);
         cn.idTableEnterScope();
-        init.code(s, classTable, cn);
+        cn.idTableAddID(this.identifier, cn.getNewTempIDOffset());
+
+        CgenSupport.emitLoadAddress(CgenSupport.ACC, this.type_decl + CgenSupport.PROTOBJ_SUFFIX, s);
+        CgenSupport.emitJal(CgenSupport.OBJECT_COPY, s);
+        CgenSupport.emitJal(this.type_decl + CgenSupport.CLASSINIT_SUFFIX, s);
+        CgenSupport.emitStore(CgenSupport.ACC, cn.idTableGetOffset(this.identifier), CgenSupport.FP, s);
+
+        if (this.init.get_type() != null) {
+            this.init.code(s, classTable, cn);
+            CgenSupport.emitStore(CgenSupport.ACC, cn.idTableGetOffset(this.identifier), CgenSupport.FP, s);
+        }
+
+        this.body.code(s, classTable, cn);
 
         cn.idTableExitScope();
         CgenSupport.emitComment("Finish let", s);
@@ -2465,12 +2474,10 @@ class object extends Expression {
                 CgenSupport.emitComment("Attr", s);
                 int attrOffset = cn.getAttrOffset(this.name);
                 CgenSupport.emitLoad(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
-            } else if (cn.idTableLookUpLocation(this.name) == CgenSupport.PARAM) {
-                CgenSupport.emitComment("Method", s);
-                int frameOffset = cn.idTableGetOffset(this.name);
-                CgenSupport.emitLoad(CgenSupport.ACC, frameOffset, CgenSupport.FP, s);
             } else {
-                CgenSupport.emitComment("Let", s);
+                CgenSupport.emitComment("Method", s);
+                int idOffset = cn.idTableGetOffset(this.name);
+                CgenSupport.emitLoad(CgenSupport.ACC, idOffset, CgenSupport.FP, s);
             }
         }
         CgenSupport.emitComment("Finish object:" + this.name, s);

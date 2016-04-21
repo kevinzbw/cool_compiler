@@ -65,6 +65,7 @@ class CgenNode extends class_c {
     private identifierTable idTable;
 
     private int numTempID = 0;
+    private int tempIDOffset = 0;
 
     /**
      * Constructs a new CgenNode to represent class "c".
@@ -247,11 +248,6 @@ class CgenNode extends class_c {
         return false;
     }
 
-
-    public void idTableAddID(AbstractSymbol id, int index) {
-        this.idTable.addId(id, index);
-    }
-
     public int idTableLookUpLocation(AbstractSymbol id) {
         return this.idTable.lookupLocation(id);
     }
@@ -275,4 +271,6 @@ class CgenNode extends class_c {
     public void setNumTempID(int n) { this.numTempID = n; }
 
     public int getNumTempID() { return this.numTempID; }
+
+    public int getNewTempIDOffset() { return (this.tempIDOffset -= 1); }
 }
