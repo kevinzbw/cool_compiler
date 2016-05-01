@@ -10,7 +10,7 @@ class Main inherits IO
     e : IO => 1;
     a : Bool => 2;
     b : Object => 3;
-	i : Int => 4;
+	  i : Int => 4;
       esac
   };
 };

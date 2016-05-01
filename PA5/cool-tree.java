@@ -1201,43 +1201,52 @@ class typcase extends Expression {
     public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         // TODO: 4/16/16 case_code
         CgenSupport.emitComment("Start case", s);
-//        this.expr.code(s, classTable, cn);
-//
-//        int notVoidLabel = CgenSupport.getNewLabelNumber();
-//        CgenSupport.emitBne(CgenSupport.ACC, CgenSupport.ZERO, notVoidLabel, s);
-//        CgenSupport.emitLoadString(CgenSupport.ACC, (StringSymbol) cn.getFilename(), s);
-//        CgenSupport.emitLoadImm(CgenSupport.T1, this.lineNumber, s);
-//        CgenSupport.emitJal("_case_abort2", s);
-//        CgenSupport.emitLabelDef(notVoidLabel, s);
-//
-//        CgenNode c = (CgenNode) classTable.lookup(expr.get_type());
-//        int curr_tag = classTable.getTag(c);
-//        int beginLabel = CgenSupport.getNewLabelNumber();
-//        int matchLabel = CgenSupport.getNewLabelNumber();
-//        int missBranchLabel = CgenSupport.getNewLabelNumber();
-//
-//        CgenSupport.emitLoadImm(CgenSupport.T1, curr_tag, s);
-//        CgenSupport.emitLabelDef(beginLabel, s);
-//
-//        CgenSupport.emitBeq(CgenSupport.T1, "-2", noMatchLabel, s);
-//        for (Enumeration e = cases.getElements(); e.hasMoreElements();) {
-//            branch b = (branch) e.nextElement();
-//            int next_branch_label = CgenNode.getLabelCountAndIncrement();
-//            int branch_tag = cgenTable.getTagId(b.type_decl);
-//            CgenSupport.emitLoadImm(CgenSupport.T2, branch_tag, s);
-//            CgenSupport.emitBne(CgenSupport.T1, CgenSupport.T2, next_branch_label, s);
-//            b.expr.code(s, cgenTable);
-//            CgenSupport.emitBranch(lubMatchLabel, s);
-//            CgenSupport.emitLabelDef(next_branch_label, s);
-//        }
-//        CgenSupport.emitLoadAddress(CgenSupport.T1, "class_parentTab", s);
-//        CgenSupport.emitLoad(CgenSupport.T1, curr_tag, CgenSupport.T1, s);
-//        CgenSupport.emitBranch(beginLabel, s);
-//
-//        CgenSupport.emitLabelDef(missBranchLabel, s);
-//        CgenSupport.emitJal("_case_abort", s);
-//
-//        CgenSupport.emitLabelDef(matchLabel, s);
+        this.expr.code(s, classTable, cn);
+
+        int notVoidLabel = CgenSupport.getNewLabelNumber();
+        CgenSupport.emitBne(CgenSupport.ACC, CgenSupport.ZERO, notVoidLabel, s);
+        CgenSupport.emitLoadString(CgenSupport.ACC, (StringSymbol) cn.getFilename(), s);
+        CgenSupport.emitLoadImm(CgenSupport.T1, this.lineNumber, s);
+        CgenSupport.emitJal("_case_abort2", s);
+        CgenSupport.emitLabelDef(notVoidLabel, s);
+
+        CgenNode c = (CgenNode) classTable.lookup(expr.get_type());
+        int curr_tag = classTable.getTag(c);
+        int beginLabel = CgenSupport.getNewLabelNumber();
+        int matchLabel = CgenSupport.getNewLabelNumber();
+        int missBranchLabel = CgenSupport.getNewLabelNumber();
+
+        CgenSupport.emitLoadImm(CgenSupport.T1, curr_tag, s);
+        CgenSupport.emitLabelDef(beginLabel, s);
+
+        CgenSupport.emitBeq(CgenSupport.T1, "-1", missBranchLabel, s);
+
+        for (Enumeration e = cases.getElements(); e.hasMoreElements();) {
+            branch b = (branch) e.nextElement();
+
+            CgenNode bc = (CgenNode) classTable.lookup(b.type_decl);
+            int branch_tag = classTable.getTag(bc);
+            int nextBranchLabel = CgenSupport.getNewLabelNumber();
+
+            CgenSupport.emitLoadImm(CgenSupport.T2, branch_tag, s);
+            CgenSupport.emitBne(CgenSupport.T1, CgenSupport.T2, nextBranchLabel, s);
+
+            cn.idTableEnterScope();
+            cn.idTableAddID(b.name, cn.getNewTempIDOffset());
+            b.expr.code(s, classTable, cn);
+            cn.idTableExitScope();
+
+            CgenSupport.emitBranch(matchLabel, s);
+            CgenSupport.emitLabelDef(nextBranchLabel, s);
+        }
+        CgenSupport.emitLoadAddress(CgenSupport.T1, CgenSupport.PARENTTABLE, s);
+        CgenSupport.emitLoad(CgenSupport.T1, curr_tag, CgenSupport.T1, s);
+        CgenSupport.emitBranch(beginLabel, s);
+
+        CgenSupport.emitLabelDef(missBranchLabel, s);
+        CgenSupport.emitJal("_case_abort", s);
+
+        CgenSupport.emitLabelDef(matchLabel, s);
 
         CgenSupport.emitComment("Finish case", s);
     }

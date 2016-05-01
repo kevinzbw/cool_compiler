@@ -138,6 +138,7 @@ class CgenSupport {
     final static int ATTR = 0;
     final static int PARAM = 1;
 
+    final static String PARENTTABLE = "parentTab";
 
     /**
      * Emits an LW instruction.
