@@ -437,6 +437,13 @@ class CgenClassTable extends SymbolTable {
         }
     }
 
+    public void codeIhertanceTab(){
+        CgenSupport.emitClassInhertTable(str);
+        for (Enumeration e = nds.elements(); e.hasMoreElements(); ){
+            CgenSupport.emitClassParentTag(str,(CgenNode) e.nextElement(), this);
+        }
+    }
+
     public void codeClassObjTab() {
         CgenSupport.emitClassObjTabLabel(str);
         for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
@@ -524,6 +531,9 @@ class CgenClassTable extends SymbolTable {
         /** Emit class_objTab */
         if (Flags.cgen_debug) System.out.println("coding class_objTab");
         codeClassObjTab();
+
+        if (Flags.cgen_debug) System.out.println("coding class_inhertTab");
+        codeIhertanceTab();
 
         /** Emit _dispTab for all classes */
         if (Flags.cgen_debug) System.out.println("coding _dispTab");

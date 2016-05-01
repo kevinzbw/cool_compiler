@@ -137,7 +137,7 @@ class CgenSupport {
     // location of identifierTable
     final static int ATTR = 0;
     final static int PARAM = 1;
-
+    final static String CLASSINHERTTAB = "class_inhertTab";
 
     /**
      * Emits an LW instruction.
@@ -754,12 +754,23 @@ class CgenSupport {
     }
 
     /**
+     *Emits Label
+     */
+    static void emitClassInhertTable(PrintStream s) { s.print(CLASSINHERTTAB+LABEL); }
+
+
+    /**
      * Emits a single tag -> name row for class_nameTab
      */
     static void emitClassNameTabBlock(PrintStream s, CgenNode cn) {
         s.print(WORD);
         ((StringSymbol) AbstractTable.stringtable.lookup(cn.getName().toString())).codeRef(s);
         s.println("");
+    }
+
+    static void emitClassParentTag(PrintStream s,CgenNode cn, CgenClassTable cgenClassTable){
+        s.print(WORD);
+        s.println(cn.getParentNd().getTag(cgenClassTable.getTable()));
     }
 
     /**
