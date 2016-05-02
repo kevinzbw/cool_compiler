@@ -769,6 +769,7 @@ class CgenSupport {
     }
 
     static void emitClassParentTag(PrintStream s,CgenNode cn, CgenClassTable cgenClassTable){
+        emitComment(cn.getName().toString(), s);
         s.print(WORD);
         s.println(cn.getParentNd().getTag(cgenClassTable.getTable()));
     }

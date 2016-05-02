@@ -363,7 +363,7 @@ class programc extends Program {
 
     /**
      * This method is the entry point to the semantic checker.  You will
-     * need to complete it in programming assignment 4.
+     * need to complete it in programming ement 4.
      * <p>
      * Your checker should do the following two things:
      * <ol>
@@ -755,7 +755,7 @@ class assign extends Expression {
             CgenSupport.emitStore(CgenSupport.ACC, frameOffset, CgenSupport.FP, s);
         } else {
             int letOffset = cn.idTableGetOffset(name);
-            CgenSupport.emitStore(CgenSupport.ACC, letOffset, CgenSupport.SP, s);
+            CgenSupport.emitStore(CgenSupport.ACC, letOffset, CgenSupport.FP, s);
         }
         CgenSupport.emitComment("Finish assign", s);
     }
@@ -1239,7 +1239,7 @@ class typcase extends Expression {
             CgenSupport.emitBranch(matchLabel, s);
             CgenSupport.emitLabelDef(nextBranchLabel, s);
         }
-        CgenSupport.emitLoadAddress(CgenSupport.T1, CgenSupport.PARENTTABLE, s);
+        CgenSupport.emitLoadAddress(CgenSupport.T1, CgenSupport.CLASSINHERTTAB, s);
         CgenSupport.emitLoad(CgenSupport.T1, curr_tag, CgenSupport.T1, s);
         CgenSupport.emitBranch(beginLabel, s);
 
@@ -1247,7 +1247,6 @@ class typcase extends Expression {
         CgenSupport.emitJal("_case_abort", s);
 
         CgenSupport.emitLabelDef(matchLabel, s);
-
         CgenSupport.emitComment("Finish case", s);
     }
 

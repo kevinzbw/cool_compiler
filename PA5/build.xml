@@ -40,7 +40,26 @@
     <exec executable="python"> <arg line="compare-cgen.py tests/5.cl"/> </exec>
     <exec executable="python"> <arg line="compare-cgen.py tests/checkpoint.cl"/> </exec>
     <echo>
-You can check 'tests/NAME.diff" to know more about a failed test case.
+      You can check 'tests/NAME.diff" to know more about a failed test case.
+    </echo>
+  </target>
+
+  <!-- target: test-all -->
+  <target name="test-ex" depends="cgen">
+      <exec executable="python"> <arg line="compare-cgen.py examples/arith.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/assign.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/atoi_test.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/book_list.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/cells.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/complex.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/cool.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/empty_class.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/fact_exception.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/fact.cl"/> </exec>
+      <!--<exec executable="python"> <arg line="compare-cgen.py examples/finally_exception.cl"/> </exec>-->
+
+      <echo>
+      You can check 'tests/NAME.diff" to know more about a failed test case.
     </echo>
   </target>
 
@@ -61,6 +80,7 @@ You can check 'tests/NAME.diff" to know more about a failed test case.
     <delete>
       <fileset dir="." includes="*~ *.s *.class ${cgen} ${output} timestamp"/>
       <fileset dir="./tests" includes="*.diff *.out.ref *.out.my *.s"/>
+        <fileset dir="./examples" includes="*.diff *.out.ref *.out.my *.s"/>
     </delete>
   </target>
 

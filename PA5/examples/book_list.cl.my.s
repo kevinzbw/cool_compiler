@@ -436,6 +436,29 @@ class_objTab:
 	.word	Nil_init
 	.word	Main_protObj
 	.word	Main_init
+class_inhertTab:
+		#Object
+	.word	-1
+		#IO
+	.word	0
+		#Int
+	.word	0
+		#Bool
+	.word	0
+		#String
+	.word	0
+		#Book
+	.word	1
+		#Article
+	.word	5
+		#BookList
+	.word	1
+		#Cons
+	.word	7
+		#Nil
+	.word	7
+		#Main
+	.word	0
 Object_dispTab:
 	.word	Object.abort
 	.word	Object.type_name
@@ -1324,25 +1347,103 @@ Cons.cdr:
 	lw	$ra 4($sp)
 	addiu	$sp $sp 12
 	jr	$ra	
-		#Num letprint_list 0
+		#Num letprint_list 2
 Cons.print_list:
-	addiu	$sp $sp -12
+	addiu	$sp $sp -4
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
-	addiu	$fp $sp 16
+	addiu	$fp $sp 24
 	move	$s0 $a0
 		#Start block
+		#Start case
+		#Start dispatch Book.print
+		#Start object:xcar
+		#Attr
+	lw	$a0 12($s0)
+		#Finish object:xcar
+	bne	$a0 $zero label16
+	la	$a0 str_const0
+	li	$t1 95
+	jal	_dispatch_abort
+label16:
+	lw	$t1 8($a0)
+	lw	$t1 32($t1)
+	jalr	$t1
+		#Finish dispatch Book.print
+	bne	$a0 $zero label17
+	la	$a0 str_const0
+	li	$t1 98
+	jal	_case_abort2
+label17:
+	li	$t1 5
+label18:
+	beq	$t1 -1 label20
+	li	$t2 5
+	bne	$t1 $t2 label21
+		#Start dispatch Cons.out_string
+		#Evaluate and push String
+		#Start string_const
+	la	$a0 str_const5
+		#Finish string_const
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
+		#Done String
+		#Start object:self
+	move	$a0 $s0
+		#Finish object:self
+	bne	$a0 $zero label22
+	la	$a0 str_const0
+	li	$t1 96
+	jal	_dispatch_abort
+label22:
+	lw	$t1 8($a0)
+	lw	$t1 12($t1)
+	jalr	$t1
+		#Finish dispatch Cons.out_string
+	b	label19
+label21:
+	li	$t2 6
+	bne	$t1 $t2 label23
+		#Start dispatch Cons.out_string
+		#Evaluate and push String
+		#Start string_const
+	la	$a0 str_const6
+		#Finish string_const
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
+		#Done String
+		#Start object:self
+	move	$a0 $s0
+		#Finish object:self
+	bne	$a0 $zero label24
+	la	$a0 str_const0
+	li	$t1 97
+	jal	_dispatch_abort
+label24:
+	lw	$t1 8($a0)
+	lw	$t1 12($t1)
+	jalr	$t1
+		#Finish dispatch Cons.out_string
+	b	label19
+label23:
+	la	$t1 class_inhertTab
+	lw	$t1 20($t1)
+	b	label18
+label20:
+	jal	_case_abort
+label19:
+		#Finish case
 		#Start dispatch BookList.print_list
 		#Start object:xcdr
 		#Attr
 	lw	$a0 16($s0)
 		#Finish object:xcdr
-	bne	$a0 $zero label16
+	bne	$a0 $zero label25
 	la	$a0 str_const0
 	li	$t1 99
 	jal	_dispatch_abort
-label16:
+label25:
 	lw	$t1 8($a0)
 	lw	$t1 44($t1)
 	jalr	$t1
@@ -1351,7 +1452,7 @@ label16:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 12
+	addiu	$sp $sp 20
 	jr	$ra	
 		#Num letisNil 0
 Nil.isNil:
@@ -1418,11 +1519,11 @@ Main.main:
 	jal	Object.copy
 	jal	Book_init
 		#Finish new
-	bne	$a0 $zero label17
+	bne	$a0 $zero label26
 	la	$a0 str_const0
 	li	$t1 119
 	jal	_dispatch_abort
-label17:
+label26:
 	lw	$t1 8($a0)
 	lw	$t1 28($t1)
 	jalr	$t1
@@ -1460,11 +1561,11 @@ label17:
 	jal	Object.copy
 	jal	Article_init
 		#Finish new
-	bne	$a0 $zero label18
+	bne	$a0 $zero label27
 	la	$a0 str_const0
 	li	$t1 124
 	jal	_dispatch_abort
-label18:
+label27:
 	lw	$t1 8($a0)
 	lw	$t1 36($t1)
 	jalr	$t1
@@ -1495,20 +1596,20 @@ label18:
 	jal	Object.copy
 	jal	Nil_init
 		#Finish new
-	bne	$a0 $zero label19
+	bne	$a0 $zero label28
 	la	$a0 str_const0
 	li	$t1 126
 	jal	_dispatch_abort
-label19:
+label28:
 	lw	$t1 8($a0)
 	lw	$t1 32($t1)
 	jalr	$t1
 		#Finish dispatch Nil.cons
-	bne	$a0 $zero label20
+	bne	$a0 $zero label29
 	la	$a0 str_const0
 	li	$t1 126
 	jal	_dispatch_abort
-label20:
+label29:
 	lw	$t1 8($a0)
 	lw	$t1 32($t1)
 	jalr	$t1
@@ -1520,11 +1621,11 @@ label20:
 		#Attr
 	lw	$a0 12($s0)
 		#Finish object:books
-	bne	$a0 $zero label21
+	bne	$a0 $zero label30
 	la	$a0 str_const0
 	li	$t1 127
 	jal	_dispatch_abort
-label21:
+label30:
 	lw	$t1 8($a0)
 	lw	$t1 44($t1)
 	jalr	$t1
