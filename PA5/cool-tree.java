@@ -741,6 +741,7 @@ class assign extends Expression {
         CgenSupport.emitComment("Start assign", s);
 
         expr.code(s, classTable, cn);
+        
         // TODO: 4/20/16 test GenGC model, assign
         if (cn.idTableLookUpLocation(name) == CgenSupport.ATTR) {
             int attrOffset = cn.getAttrOffset(name);
@@ -748,7 +749,7 @@ class assign extends Expression {
             // garbage collect
             if (Flags.cgen_Memmgr != Flags.GC_NOGC) {
                 CgenSupport.emitAddiu(CgenSupport.A1, CgenSupport.SELF, attrOffset,s);
-                CgenSupport.emitJal("_GenGC_Assign", s);
+                CgenSupport.emitGCAssign(s);
             }
         } else if (cn.idTableLookUpLocation(name) == CgenSupport.PARAM) {
             int frameOffset = cn.idTableGetOffset(name);
@@ -834,9 +835,7 @@ class static_dispatch extends Expression {
     public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         AbstractSymbol exprType = this.type_name;
 
-        // TODO: 4/15/16 let
         CgenSupport.emitComment("Start dispatch " + exprType + "." + this.name, s);
-
 
         for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
             Expression arg = (Expression) en.nextElement();
@@ -943,7 +942,7 @@ class dispatch extends Expression {
         if (exprType == TreeConstants.SELF_TYPE) {
             exprType = cn.getName();
         }
-        // TODO: 4/15/16 let
+
         CgenSupport.emitComment("Start dispatch " + exprType + "." + this.name, s);
 
         for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
@@ -1199,7 +1198,6 @@ class typcase extends Expression {
      * @param cn
      */
     public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
-        // TODO: 4/16/16 case_code
         CgenSupport.emitComment("Start case", s);
         this.expr.code(s, classTable, cn);
 
@@ -1390,7 +1388,6 @@ class let extends Expression {
      * @param cn
      */
     public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
-        // TODO: 4/16/16 let_code
         CgenSupport.emitComment("Start let", s);
         cn.idTableEnterScope();
         cn.idTableAddID(this.identifier, cn.getNewTempIDOffset());
@@ -2461,7 +2458,6 @@ class no_expr extends Expression {
      * @param cn
      */
     public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
-        // TODO: 4/16/16 no_code
     }
 
     @Override
