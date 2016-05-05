@@ -148,7 +148,7 @@ class CgenNode extends class_c {
                 this.idTable.addId(((attr) f).getName(), attrTab.indexOf(f));
             } else {
                 /** e is Method */
-                if (isOverrideMethod(((method) f).getName())) {
+                if (isOverrideMethod((method) f)) {
                     /** Override */
                     this.nameToClassMap.put((method) f, this.getName());
                 } else {
@@ -163,8 +163,16 @@ class CgenNode extends class_c {
     /**
      * Check if the cloned parent method table has the method
      */
-    private Boolean isOverrideMethod(AbstractSymbol methodName) {
-        return this.methodTab.contains(methodName);
+    private Boolean isOverrideMethod(method f) {
+        for (Enumeration<method> e = this.methodTab.elements(); e.hasMoreElements(); ) {
+            method curr = e.nextElement();
+            if (curr.getName() == f.getName()) {
+                this.nameToClassMap.remove(curr);
+                methodTab.set(methodTab.indexOf(curr), f);
+                return true;
+            }
+        }
+        return false;
     }
 
     private Vector cloneMethodTab() {
@@ -194,7 +202,13 @@ class CgenNode extends class_c {
      */
 
     int getMethodIndex(method m) {
-        return this.methodTab.indexOf(m);
+        for (Enumeration<method> e = this.methodTab.elements(); e.hasMoreElements(); ){
+            method curr = e.nextElement();
+            if (curr.getName() == m.getName()){
+                return this.methodTab.indexOf(curr);
+            }
+        }
+        return -1;
     }
 
     int getMethodOffset(AbstractSymbol name) {
@@ -212,7 +226,6 @@ class CgenNode extends class_c {
      */
     int getAttrIndex(attr att) {
         return this.attrTab.indexOf(att);
-
     }
 
     int getAttrOffset(AbstractSymbol name) {
