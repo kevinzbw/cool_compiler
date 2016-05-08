@@ -404,6 +404,9 @@ class CgenClassTable extends SymbolTable {
     // a tree of `CgenNode', and class names are placed
     // in the base class symbol table.
 
+    /**
+     * Initialize class
+     */
     private void installClass(CgenNode nd) {
         AbstractSymbol name = nd.getName();
         if (probe(name) != null) return;
@@ -411,6 +414,9 @@ class CgenClassTable extends SymbolTable {
         addId(name, nd);
     }
 
+    /**
+     * Initialize classes
+     */
     private void installClasses(Classes cs) {
         for (Enumeration e = cs.getElements(); e.hasMoreElements(); ) {
             installClass(new CgenNode((Class_) e.nextElement(),
@@ -418,18 +424,27 @@ class CgenClassTable extends SymbolTable {
         }
     }
 
+    /**
+     * Build inheritance tree
+     */
     private void buildInheritanceTree() {
         for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
             setRelations((CgenNode) e.nextElement());
         }
     }
 
+    /**
+     * Set relations
+     */
     private void setRelations(CgenNode nd) {
         CgenNode parent = (CgenNode) probe(nd.getParent());
         nd.setParentNd(parent);
         parent.addChild(nd);
     }
 
+    /**
+     * Construct the inheritance table
+     */
     public void codeClassNameTab() {
         CgenSupport.emitClassNameTabLabel(str);
         for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
@@ -437,13 +452,19 @@ class CgenClassTable extends SymbolTable {
         }
     }
 
-    public void codeIhertanceTab(){
+    /**
+     * Construct the inheritance table
+     */
+    public void codeInheritanceTab(){
         CgenSupport.emitClassInhertTable(str);
         for (Enumeration e = nds.elements(); e.hasMoreElements(); ){
             CgenSupport.emitClassParentTag(str,(CgenNode) e.nextElement(), this);
         }
     }
 
+    /**
+     * Construct the class obj table
+     */
     public void codeClassObjTab() {
         CgenSupport.emitClassObjTabLabel(str);
         for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
@@ -451,6 +472,9 @@ class CgenClassTable extends SymbolTable {
         }
     }
 
+    /**
+     * Construct the dispatch table
+     */
     public void codeDispTab() {
         for (Enumeration e = nds.elements(); e.hasMoreElements(); ) {
             CgenSupport.emitDispTabForSingleClass(str, (CgenNode) e.nextElement());
@@ -533,7 +557,7 @@ class CgenClassTable extends SymbolTable {
         codeClassObjTab();
 
         if (Flags.cgen_debug) System.out.println("coding class_inhertTab");
-        codeIhertanceTab();
+        codeInheritanceTab();
 
         /** Emit _dispTab for all classes */
         if (Flags.cgen_debug) System.out.println("coding _dispTab");
@@ -552,20 +576,23 @@ class CgenClassTable extends SymbolTable {
         //                   - etc...
 
         if (Flags.cgen_debug) System.out.println("coding class initalizer");
-        codeClassInitalizer();
+        codeClassInitializer();
 
         if (Flags.cgen_debug) System.out.println("coding class method");
         codeClassMethod();
     }
 
+    /**
+     * Code class method
+     */
     public void codeClassMethod() {
         CgenSupport.emitMethodCodeForTree(str, this.root(), this);
     }
 
     /**
-     * Code class initalizer
+     * Code class initializer
      */
-    public void codeClassInitalizer() {
+    public void codeClassInitializer() {
         CgenSupport.emitClassInitForTree(str, this.root(), this);
     }
 
@@ -602,20 +629,27 @@ class CgenClassTable extends SymbolTable {
         }
     }
 
+    /**
+     * Get the table
+     */
     public Vector getTable() {
         return this.nds;
     }
 
+    /**
+     * Check whether it is primitive
+     */
     public Boolean isPrimitive(AbstractSymbol typename) {
         int i = ((CgenNode) this.lookup(typename)).getTag(nds);
         return (i == this.stringclasstag) || (i == this.boolclasstag) || (i == this.intclasstag);
     }
 
+    /**
+     * Check tag of class
+     */
     public int getTag(CgenNode cn) {
         return this.nds.indexOf(cn);
     }
-
-
 }
 
 

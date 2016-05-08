@@ -67,7 +67,12 @@ Class BookList inherits IO {
     *)
     cdr() : BookList { { abort(); new BookList; } };
     
-    print_list() : Object { abort() };
+    print_list() : Object { 
+        {out_string("4\n");
+        abort(); 
+        out_string("5\n");
+        }
+    };
 };
 
 Class Cons inherits BookList {
@@ -92,11 +97,13 @@ Class Cons inherits BookList {
     
     print_list() : Object {
         {
+            out_string("2\n");
             case xcar.print() of
                 dummy : Book => out_string("- dynamic type was Book -\n");
                 dummy : Article => out_string("- dynamic type was Article -\n");
             esac;
-            xcdr.print_list();
+            out_string("3\n");
+            -- xcdr.print_list();
         }
     };
 };
@@ -108,7 +115,7 @@ Class Nil inherits BookList {
 };
 
 
-Class Main {
+Class Main inherits IO{
 
     books : BookList;
 
@@ -124,6 +131,7 @@ Class Main {
             in
                 {
                     books <- (new Nil).cons(a_book).cons(an_article);
+                    out_string("1\n");
                     books.print_list();
                 }
             )  -- end let an_article

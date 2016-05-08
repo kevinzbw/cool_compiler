@@ -135,6 +135,9 @@ class CgenNode extends class_c {
         return basic_status == Basic;
     }
 
+    /**
+     * Construct the feature table
+     */
     public void constructFeatureTabs() {
         this.methodTab = parent.cloneMethodTab();
         this.nameToClassMap = parent.cloneNameToClassMap();
@@ -175,22 +178,37 @@ class CgenNode extends class_c {
         return false;
     }
 
+    /**
+     * Clone method table
+     */
     private Vector cloneMethodTab() {
         return (Vector) this.methodTab.clone();
     }
 
+    /**
+     * Clone name to class map
+     */
     private HashMap cloneNameToClassMap() {
         return (HashMap) this.nameToClassMap.clone();
     }
 
+    /**
+     * Clone attr table
+     */
     private Vector<attr> cloneAttrTab() {
         return (Vector<attr>) this.attrTab.clone();
     }
 
+    /**
+     * Get the enumeration of method
+     */
     public Enumeration getMethodElement() {
         return this.methodTab.elements();
     }
 
+    /**
+     * Get the method-class prefix
+     */
     public AbstractSymbol getMethodClassPrefix(method methodname) {
         return this.nameToClassMap.get(methodname);
     }
@@ -200,22 +218,25 @@ class CgenNode extends class_c {
      *
      * @return offset
      */
-
     int getMethodIndex(method m) {
-        for (Enumeration<method> e = this.methodTab.elements(); e.hasMoreElements(); ){
+        for (Enumeration<method> e = this.methodTab.elements(); e.hasMoreElements(); ) {
             method curr = e.nextElement();
-            if (curr.getName() == m.getName()){
+            if (curr.getName() == m.getName()) {
                 return this.methodTab.indexOf(curr);
             }
         }
         return -1;
     }
 
+    /**
+     * Get the method's offset
+     */
     int getMethodOffset(AbstractSymbol name) {
         for (Enumeration<method> e = this.getMethodElement(); e.hasMoreElements(); ) {
             method m = e.nextElement();
             if (m.getName() == name) return getMethodIndex(m);
         }
+        System.out.print("Method " + name + " Lookup Failure");
         return -1;
     }
 
@@ -228,11 +249,15 @@ class CgenNode extends class_c {
         return this.attrTab.indexOf(att);
     }
 
+    /**
+     * Get the attr's offset
+     */
     int getAttrOffset(AbstractSymbol name) {
         for (Enumeration<attr> e = this.getAttrElement(); e.hasMoreElements(); ) {
             attr a = e.nextElement();
             if (a.getName() == name) return getAttrIndex(a) + 3;
         }
+        System.out.print("Attr " + name + " Lookup Failure");
         return -1;
     }
 
@@ -243,16 +268,22 @@ class CgenNode extends class_c {
         return nds.indexOf(this);
     }
 
+    /**
+     * Get the size of attrs
+     */
     public int getAttrTabSize() {
         return this.attrTab.size();
     }
 
+    /**
+     * Get teh enumeration of attrs
+     */
     public Enumeration getAttrElement() {
         return this.attrTab.elements();
     }
 
     /**
-     * check method
+     * Check method
      */
     public boolean containsMethod(method m) {
         for (Enumeration<method> e = getMethodElement(); e.hasMoreElements(); ) {
@@ -272,7 +303,7 @@ class CgenNode extends class_c {
     }
 
     /**
-     * Get ID's offset
+     * Get the ID's offset
      */
     public int idTableGetOffset(AbstractSymbol name) {
         return (Integer) idTable.lookup(name);
@@ -293,7 +324,7 @@ class CgenNode extends class_c {
     }
 
     /**
-     * Pair ID's name to offset
+     * Pair the ID's name and its offset
      */
     public void idTableAddID(AbstractSymbol name, Integer offset) {
         idTable.addId(name, offset);
@@ -302,15 +333,21 @@ class CgenNode extends class_c {
     /**
      * Set the number of temp ID
      */
-    public void setNumTempID(int n) { this.numTempID = n; }
+    public void setNumTempID(int n) {
+        this.numTempID = n;
+    }
 
     /**
      * Get the number of temp ID
      */
-    public int getNumTempID() { return this.numTempID; }
+    public int getNumTempID() {
+        return this.numTempID;
+    }
 
     /**
      * Get the new temp ID's offset
      */
-    public int getNewTempIDOffset() { return (this.tempIDOffset -= 1); }
+    public int getNewTempIDOffset() {
+        return (this.tempIDOffset -= 1);
+    }
 }
