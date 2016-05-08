@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="4de779ed-bbf6-43e5-b916-b992b4265c88" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CgenNode.java" afterPath="$PROJECT_DIR$/CgenNode.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README" afterPath="$PROJECT_DIR$/README" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cool-tree.java" afterPath="$PROJECT_DIR$/cool-tree.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/book_list.cl" afterPath="$PROJECT_DIR$/examples/book_list.cl" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/book_list.cl.diff" afterPath="$PROJECT_DIR$/examples/book_list.cl.diff" />
@@ -42,7 +44,7 @@
       <file leaf-file-name="CgenClassTable.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CgenClassTable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
+            <state relative-caret-position="0">
               <caret line="177" column="0" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
               <folding />
             </state>
@@ -62,7 +64,7 @@
       <file leaf-file-name="Flags.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Flags.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-195">
+            <state relative-caret-position="570">
               <caret line="57" column="50" selection-start-line="57" selection-start-column="42" selection-end-line="57" selection-end-column="50" />
               <folding />
             </state>
@@ -74,7 +76,13 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
               <caret line="5" column="3" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#225#226#0" expanded="false" />
+                <element signature="e#258#259#0" expanded="false" />
+                <element signature="e#407#408#0" expanded="false" />
+                <element signature="e#448#449#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -82,11 +90,13 @@
       <file leaf-file-name="CgenNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CgenNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="219" column="37" selection-start-line="219" selection-start-column="37" selection-end-line="219" selection-end-column="37" />
+            <state relative-caret-position="279">
+              <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
               <folding>
-                <element signature="e#0#7553#0" expanded="true" />
+                <element signature="e#0#7959#0" expanded="true" />
                 <element signature="imports" expanded="true" />
+                <element signature="e#7165#7166#0" expanded="true" />
+                <element signature="e#7218#7219#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -95,11 +105,9 @@
       <file leaf-file-name="CgenSupport.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CgenSupport.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="389" column="28" selection-start-line="389" selection-start-column="16" selection-end-line="389" selection-end-column="28" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="12870">
+              <caret line="911" column="19" selection-start-line="911" selection-start-column="19" selection-end-line="911" selection-end-column="19" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -107,8 +115,8 @@
       <file leaf-file-name="cool-tree.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cool-tree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="743" column="8" selection-start-line="743" selection-start-column="8" selection-end-line="743" selection-end-column="8" />
+            <state relative-caret-position="279">
+              <caret line="1230" column="0" selection-start-line="1230" selection-start-column="0" selection-end-line="1230" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -119,7 +127,7 @@
       <file leaf-file-name="trap_handler.mars" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trap_handler.mars">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1211">
+            <state relative-caret-position="-96">
               <caret line="1633" column="25" selection-start-line="1633" selection-start-column="11" selection-end-line="1633" selection-end-column="25" />
               <folding />
             </state>
@@ -155,13 +163,13 @@
         <option value="$PROJECT_DIR$/BoolConst.java" />
         <option value="$PROJECT_DIR$/StringSymbol.java" />
         <option value="$PROJECT_DIR$/IntSymbol.java" />
-        <option value="$PROJECT_DIR$/README" />
         <option value="$PROJECT_DIR$/CgenClassTable.java" />
-        <option value="$PROJECT_DIR$/CgenNode.java" />
         <option value="$PROJECT_DIR$/build.xml" />
         <option value="$PROJECT_DIR$/identifierTable.java" />
         <option value="$PROJECT_DIR$/CgenSupport.java" />
         <option value="$PROJECT_DIR$/cool-tree.java" />
+        <option value="$PROJECT_DIR$/README" />
+        <option value="$PROJECT_DIR$/CgenNode.java" />
       </list>
     </option>
   </component>
@@ -181,8 +189,8 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="260" />
-    <option name="y" value="66" />
+    <option name="x" value="40" />
+    <option name="y" value="54" />
     <option name="width" value="1400" />
     <option name="height" value="779" />
   </component>
@@ -214,6 +222,7 @@
       <pane id="PackagesPane">
         <subPane />
       </pane>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -232,24 +241,9 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PA5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PA5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cool-tree.java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -693,7 +687,12 @@
       <workItem from="1461257891452" duration="3526000" />
       <workItem from="1462137391467" duration="49000" />
       <workItem from="1462138445758" duration="4031000" />
-      <workItem from="1462144854931" duration="10486000" />
+      <workItem from="1462144854931" duration="11093000" />
+      <workItem from="1462222868268" duration="6000" />
+      <workItem from="1462398644995" duration="285000" />
+      <workItem from="1462404414172" duration="47000" />
+      <workItem from="1462663598773" duration="309000" />
+      <workItem from="1462664277026" duration="3039000" />
     </task>
     <task id="LOCAL-00001" summary="before merge">
       <created>1460782568226</created>
@@ -779,11 +778,18 @@
       <option name="project" value="LOCAL" />
       <updated>1462151509679</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="May1-fix assign debug &#10;">
+      <created>1462165288331</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1462165288331</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="110886000" />
+    <option name="totallyTimeSpent" value="115179000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -795,24 +801,22 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="260" y="66" width="1400" height="779" extended-state="0" />
+    <frame x="40" y="54" width="1400" height="779" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18195051" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16739447" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18195051" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.09724238" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.09724238" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946298" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24815905" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896653" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2496318" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16421208" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -822,7 +826,9 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16739447" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896653" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -877,7 +883,8 @@
     <MESSAGE value="May1-case" />
     <MESSAGE value="May1-debug case&#10;" />
     <MESSAGE value="May1-debug case2&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="May1-debug case2&#10;" />
+    <MESSAGE value="May1-fix assign debug &#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="May1-fix assign debug &#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -906,8 +913,10 @@
         <state relative-caret-position="1875">
           <caret line="146" column="31" selection-start-line="146" selection-start-column="22" selection-end-line="146" selection-end-column="31" />
           <folding>
-            <element signature="e#0#7553#0" expanded="true" />
+            <element signature="e#0#7959#0" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="e#7165#7166#0" expanded="true" />
+            <element signature="e#7218#7219#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -923,9 +932,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="10890">
           <caret line="777" column="16" selection-start-line="777" selection-start-column="16" selection-end-line="777" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -966,9 +973,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#2922#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -979,8 +983,10 @@
         <state relative-caret-position="435">
           <caret line="52" column="37" selection-start-line="52" selection-start-column="37" selection-end-line="52" selection-end-column="37" />
           <folding>
-            <element signature="e#0#7553#0" expanded="true" />
+            <element signature="e#0#7959#0" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="e#7165#7166#0" expanded="true" />
+            <element signature="e#7218#7219#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1010,8 +1016,10 @@
         <state relative-caret-position="435">
           <caret line="52" column="37" selection-start-line="52" selection-start-column="37" selection-end-line="52" selection-end-column="37" />
           <folding>
-            <element signature="e#0#7553#0" expanded="true" />
+            <element signature="e#0#7959#0" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="e#7165#7166#0" expanded="true" />
+            <element signature="e#7218#7219#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1041,8 +1049,10 @@
         <state relative-caret-position="0">
           <caret line="52" column="37" selection-start-line="52" selection-start-column="37" selection-end-line="52" selection-end-column="37" />
           <folding>
-            <element signature="e#0#7553#0" expanded="true" />
+            <element signature="e#0#7959#0" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="e#7165#7166#0" expanded="true" />
+            <element signature="e#7218#7219#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1071,9 +1081,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
           <caret line="29" column="6" selection-start-line="29" selection-start-column="6" selection-end-line="29" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#2922#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1081,7 +1088,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1142,14 +1148,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-60">
           <caret line="28" column="6" selection-start-line="28" selection-start-column="6" selection-end-line="28" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2280">
-          <caret line="152" column="0" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1158,7 +1156,7 @@
     <entry file="file://$PROJECT_DIR$/tests/checkpoint.cl.out.my" />
     <entry file="file://$PROJECT_DIR$/CgenClassTable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
+        <state relative-caret-position="0">
           <caret line="177" column="0" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
           <folding />
         </state>
@@ -1166,7 +1164,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Flags.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-195">
+        <state relative-caret-position="570">
           <caret line="57" column="50" selection-start-line="57" selection-start-column="42" selection-end-line="57" selection-end-column="50" />
           <folding />
         </state>
@@ -1176,7 +1174,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="5" column="3" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#225#226#0" expanded="false" />
+            <element signature="e#258#259#0" expanded="false" />
+            <element signature="e#407#408#0" expanded="false" />
+            <element signature="e#448#449#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1188,17 +1192,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CgenNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="219" column="37" selection-start-line="219" selection-start-column="37" selection-end-line="219" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#7553#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/build.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="417">
@@ -1207,28 +1200,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CgenSupport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="389" column="28" selection-start-line="389" selection-start-column="16" selection-end-line="389" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trap_handler.mars">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1211">
+        <state relative-caret-position="-96">
           <caret line="1633" column="25" selection-start-line="1633" selection-start-column="11" selection-end-line="1633" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/README">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="199" column="0" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CgenSupport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12870">
+          <caret line="911" column="19" selection-start-line="911" selection-start-column="19" selection-end-line="911" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CgenNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#7959#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#7165#7166#0" expanded="true" />
+            <element signature="e#7218#7219#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cool-tree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="743" column="8" selection-start-line="743" selection-start-column="8" selection-end-line="743" selection-end-column="8" />
+        <state relative-caret-position="279">
+          <caret line="1230" column="0" selection-start-line="1230" selection-start-column="0" selection-end-line="1230" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

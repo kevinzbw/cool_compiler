@@ -741,7 +741,7 @@ class assign extends Expression {
         CgenSupport.emitComment("Start assign", s);
 
         expr.code(s, classTable, cn);
-        
+
         // TODO: 4/20/16 test GenGC model, assign
         if (cn.idTableLookUpLocation(name) == CgenSupport.ATTR) {
             int attrOffset = cn.getAttrOffset(name);
@@ -2522,7 +2522,7 @@ class object extends Expression {
                 int attrOffset = cn.getAttrOffset(this.name);
                 CgenSupport.emitLoad(CgenSupport.ACC, attrOffset, CgenSupport.SELF, s);
             } else {
-                CgenSupport.emitComment("Method", s);
+                CgenSupport.emitComment("Para or Let", s);
                 int idOffset = cn.idTableGetOffset(this.name);
                 CgenSupport.emitLoad(CgenSupport.ACC, idOffset, CgenSupport.FP, s);
             }

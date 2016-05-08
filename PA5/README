@@ -177,7 +177,20 @@ Write-up for PA5
 ----------------
  (i) how late this assignment is, and (ii) how much of the total slip time you have left.
 
- (1) This is 28 Hours late (2) cs164-fg has 63 hours left. cs164-ff has 47 hours left.
+thorough discussion of design decisions and choice of test cases; a few paragraphs of coherent English sentences should be fine
+This file will contain the write-up for your assignment. It is critical that you explain design decisions, how your code is structured, and why you believe your design is a good one (i.e., why it leads to a correct and robust program). It is part of the assignment to explain things in text as well as to comment your code.
+
+Design Decisions:
+
+
+
+
+
+
+
+
+
+
 
 
 

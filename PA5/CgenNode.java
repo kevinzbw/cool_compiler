@@ -238,6 +238,9 @@ class CgenNode extends class_c {
         return this.attrTab.elements();
     }
 
+    /**
+     * check method
+     */
     public boolean containsMethod(method m) {
         for (Enumeration<method> e = getMethodElement(); e.hasMoreElements(); ) {
             method tem = e.nextElement();
@@ -248,29 +251,53 @@ class CgenNode extends class_c {
         return false;
     }
 
+    /**
+     * Get the location of ID
+     */
     public int idTableLookUpLocation(AbstractSymbol id) {
         return this.idTable.lookupLocation(id);
     }
 
+    /**
+     * Get ID's offset
+     */
     public int idTableGetOffset(AbstractSymbol name) {
         return (Integer) idTable.lookup(name);
     }
 
+    /**
+     * idTable enters scope
+     */
     public void idTableEnterScope() {
         idTable.enterScope();
     }
 
+    /**
+     * idTable exits scope
+     */
     public void idTableExitScope() {
         idTable.exitScope();
     }
 
+    /**
+     * Pair ID's name to offset
+     */
     public void idTableAddID(AbstractSymbol name, Integer offset) {
         idTable.addId(name, offset);
     }
 
+    /**
+     * Set the number of temp ID
+     */
     public void setNumTempID(int n) { this.numTempID = n; }
 
+    /**
+     * Get the number of temp ID
+     */
     public int getNumTempID() { return this.numTempID; }
 
+    /**
+     * Get the new temp ID's offset
+     */
     public int getNewTempIDOffset() { return (this.tempIDOffset -= 1); }
 }
