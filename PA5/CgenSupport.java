@@ -930,7 +930,7 @@ class CgenSupport {
      * Code method start
      */
     static void emitMethodPre(PrintStream s, CgenNode cn) {
-        if (cn != null) emitAddiu(SP, SP, -12 + 4 * cn.getNumTempID(), s);
+        if (cn != null) emitAddiu(SP, SP, -12 - 4 * cn.getNumTempID(), s);
         else emitAddiu(SP, SP, -12, s);
         emitStore(FP, 3, SP, s);
         emitStore(SELF, 2, SP, s);
