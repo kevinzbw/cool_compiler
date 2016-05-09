@@ -137,7 +137,7 @@ class CgenSupport {
     // location of identifierTable
     final static int ATTR = 0;
     final static int PARAM = 1;
-    final static String CLASSINHERTTAB = "class_inhertTab";
+    final static String CLASSINHERTTAB = "class_inheritTab";
 
     /**
      * Emits an LW instruction.

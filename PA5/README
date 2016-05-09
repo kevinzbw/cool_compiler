@@ -181,9 +181,54 @@ thorough discussion of design decisions and choice of test cases; a few paragrap
 This file will contain the write-up for your assignment. It is critical that you explain design decisions, how your code is structured, and why you believe your design is a good one (i.e., why it leads to a correct and robust program). It is part of the assignment to explain things in text as well as to comment your code.
 
 Design Decisions:
+We divided our compiler to two major parts. 
 
+1. The first part has three tasks.
 
+    1)Static MIPS Table Construction
+    We constructed some constants, class_name table, class_object table, dispatch table and proto_object. According to the reference compiler, we designed this part carefully to make it identical as the reference compiler. In order to make our code more clear and logical, we constructed these static tables in a recursive way. i.e.
+        static void emitMethodCodeForTree(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable) {
+        ……    
+        emitMethodCode(s, m, cgenClassTable, cn);
+        ……
+           for (Enumeration e = cn.getChildren(); e.hasMoreElements(); ) {
+                emitMethodCodeForTree(s, (CgenNode) e.nextElement(), cgenClassTable);
+           }
+        }
 
+    We added a special table ‘class_inheritTab’ for the case statement, which is not in the reference compiler. It represents the inheritance relation among all the classes, so we can use this table to check dynamic type.
+    i.e.
+    Object -1
+    IO      0
+    Int     0
+    String  0
+    Bool    0
+    Main    1 (if Main inherits IO)
+
+    For the case statement, firstly, we evaluate the expression and get the type. Then we check the following branches. If there is any match, we go to that branch. Otherwise, we check its parent with the branches. Repeat this procedure until we get a tag -1 which means there is no match. 
+
+    2)Maintain the Environment
+    In every CgenNode, we have the nameToClassMap, attrTab, methodTab and identifierTable. At the beginning of the code generation, we initialize those contents properly so that we can get enough information to generate the correct MIPS code.
+    identifierTable.java is very similar to SymbolTable. The only difference is that identifierTable can determine whether the ID is an attribute, a parameter or a ‘let’ variable.
+
+    3)Calling convention
+SP->
+    RA
+    Self
+    Old FP
+    tempVm
+    ……
+    tempV2
+    tempV1
+FP->para1
+    para2
+    ……
+    paraN
+    Before we generate the MIPS code for each method, we traverse the cool-tree to calculate the number of temp variable that we need first. In order to make the life easier, we don't reuse the temp variable.
+
+2. The second part is to generate the MIPS code.
+    In this part, we carefully generate our MIPS code according to the output from the reference compiler and the cool manual, except the case statement. For the case statement, firstly, we evaluate the expression and get the type. Then we check the following branches. If there is any match, we go to that branch. Otherwise, we check its parent with the branches. Repeat this procedure until we get a tag -1 which means there is no match. 
+    We also emit comments at the beginning and the end of each code() for efficient debugging.
 
 
 

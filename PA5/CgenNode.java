@@ -147,8 +147,7 @@ class CgenNode extends class_c {
 
             if (f instanceof attr) {
                 /** e is Attr */
-                attrTab.addElement((attr) f);
-                this.idTable.addId(((attr) f).getName(), attrTab.indexOf(f));
+                this.attrTab.addElement((attr) f);
             } else {
                 /** e is Method */
                 if (isOverrideMethod((method) f)) {
@@ -160,6 +159,9 @@ class CgenNode extends class_c {
                     this.methodTab.addElement((method) f);
                 }
             }
+        }
+        for (attr i : attrTab) {
+            this.idTable.addId(i.getName(), attrTab.indexOf(i));
         }
     }
 
@@ -236,7 +238,7 @@ class CgenNode extends class_c {
             method m = e.nextElement();
             if (m.getName() == name) return getMethodIndex(m);
         }
-        System.out.print("Method " + name + " Lookup Failure");
+        System.exit(1);
         return -1;
     }
 
@@ -257,7 +259,7 @@ class CgenNode extends class_c {
             attr a = e.nextElement();
             if (a.getName() == name) return getAttrIndex(a) + 3;
         }
-        System.out.print("Attr " + name + " Lookup Failure");
+        System.exit(1);
         return -1;
     }
 
@@ -298,8 +300,8 @@ class CgenNode extends class_c {
     /**
      * Get the location of ID
      */
-    public int idTableLookUpLocation(AbstractSymbol id) {
-        return this.idTable.lookupLocation(id);
+    public Integer idTableLookUpLocation(AbstractSymbol id) {
+        return idTable.lookupLocation(id);
     }
 
     /**
@@ -328,6 +330,13 @@ class CgenNode extends class_c {
      */
     public void idTableAddID(AbstractSymbol name, Integer offset) {
         idTable.addId(name, offset);
+    }
+
+    /**
+     * Pair the ID's name and its offset
+     */
+    public identifierTable idTable() {
+        return idTable;
     }
 
     /**

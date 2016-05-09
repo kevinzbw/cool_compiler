@@ -751,12 +751,9 @@ class assign extends Expression {
                 CgenSupport.emitAddiu(CgenSupport.A1, CgenSupport.SELF, attrOffset,s);
                 CgenSupport.emitGCAssign(s);
             }
-        } else if (cn.idTableLookUpLocation(name) == CgenSupport.PARAM) {
-            int frameOffset = cn.idTableGetOffset(name);
-            CgenSupport.emitStore(CgenSupport.ACC, frameOffset, CgenSupport.FP, s);
         } else {
-            int letOffset = cn.idTableGetOffset(name);
-            CgenSupport.emitStore(CgenSupport.ACC, letOffset, CgenSupport.FP, s);
+            int Offset = cn.idTableGetOffset(name);
+            CgenSupport.emitStore(CgenSupport.ACC, Offset, CgenSupport.FP, s);
         }
         CgenSupport.emitComment("Finish assign", s);
     }
@@ -1207,18 +1204,24 @@ class typcase extends Expression {
         CgenSupport.emitLoadImm(CgenSupport.T1, this.lineNumber, s);
         CgenSupport.emitJal("_case_abort2", s);
         CgenSupport.emitLabelDef(notVoidLabel, s);
-
-        CgenNode c = (CgenNode) classTable.lookup(expr.get_type());
+        CgenNode c;
+        if (expr.get_type() == TreeConstants.SELF_TYPE) {
+            c = cn;
+        } else {
+            c = (CgenNode) classTable.lookup(expr.get_type());
+        }
         int curr_tag = classTable.getTag(c);
         int beginLabel = CgenSupport.getNewLabelNumber();
         int matchLabel = CgenSupport.getNewLabelNumber();
         int missBranchLabel = CgenSupport.getNewLabelNumber();
 
+        CgenSupport.emitComment("begin matching", s);
         CgenSupport.emitLoadImm(CgenSupport.T1, curr_tag, s);
         CgenSupport.emitLabelDef(beginLabel, s);
 
         CgenSupport.emitBeq(CgenSupport.T1, "-1", missBranchLabel, s);
 
+        CgenSupport.emitComment("branches start", s);
         for (Enumeration e = cases.getElements(); e.hasMoreElements();) {
             branch b = (branch) e.nextElement();
 
@@ -1230,13 +1233,19 @@ class typcase extends Expression {
             CgenSupport.emitBne(CgenSupport.T1, CgenSupport.T2, nextBranchLabel, s);
 
             cn.idTableEnterScope();
+
             cn.idTableAddID(b.name, cn.getNewTempIDOffset());
+//            s.print("!!!!!!!!!!!!!!!!++" + b.name);
+//            s.print(cn.idTable().toString());
+
             b.expr.code(s, classTable, cn);
             cn.idTableExitScope();
 
             CgenSupport.emitBranch(matchLabel, s);
             CgenSupport.emitLabelDef(nextBranchLabel, s);
         }
+        CgenSupport.emitComment("branches done", s);
+
         CgenSupport.emitLoadAddress(CgenSupport.T1, CgenSupport.CLASSINHERTTAB, s);
         CgenSupport.emitLoad(CgenSupport.T1, curr_tag, CgenSupport.T1, s);
         CgenSupport.emitBranch(beginLabel, s);
@@ -2514,9 +2523,13 @@ class object extends Expression {
      */
     public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         CgenSupport.emitComment("Start object:" + this.name, s);
+//        s.print(cn.idTable().toString());
+
         if (this.name == TreeConstants.self) {
             CgenSupport.emitMove(CgenSupport.ACC, CgenSupport.SELF, s);
         } else {
+//            if (cn.idTableLookUpLocation(this.name) == null)
+//                s.print("NULL Pointer!!!!!!!!!!!!!!!!!!!!" + this.name.index);
             if (cn.idTableLookUpLocation(this.name) == CgenSupport.ATTR) {
                 CgenSupport.emitComment("Attr", s);
                 int attrOffset = cn.getAttrOffset(this.name);

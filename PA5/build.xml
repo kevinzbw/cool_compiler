@@ -45,8 +45,7 @@
   </target>
 
   <!-- target: test-all -->
-  <target name="test-ex" depends="cgen">
-      <exec executable="python"> <arg line="compare-cgen.py examples/arith.cl"/> </exec>
+  <target name="tests" depends="cgen">
       <exec executable="python"> <arg line="compare-cgen.py examples/assign.cl"/> </exec>
       <exec executable="python"> <arg line="compare-cgen.py examples/atoi_test.cl"/> </exec>
       <exec executable="python"> <arg line="compare-cgen.py examples/book_list.cl"/> </exec>
@@ -56,8 +55,16 @@
       <exec executable="python"> <arg line="compare-cgen.py examples/empty_class.cl"/> </exec>
       <exec executable="python"> <arg line="compare-cgen.py examples/fact_exception.cl"/> </exec>
       <exec executable="python"> <arg line="compare-cgen.py examples/fact.cl"/> </exec>
-      <!--<exec executable="python"> <arg line="compare-cgen.py examples/finally_exception.cl"/> </exec>-->
-
+      <exec executable="python"> <arg line="compare-cgen.py examples/hairyscary.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/hello_world.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/lam.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/let_example.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/life.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/list.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/new_complex.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/palindrome.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/primes.cl"/> </exec>
+      <exec executable="python"> <arg line="compare-cgen.py examples/sort_list.cl"/> </exec>
       <echo>
       You can check 'tests/NAME.diff" to know more about a failed test case.
     </echo>
