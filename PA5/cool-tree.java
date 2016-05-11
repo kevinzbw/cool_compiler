@@ -832,7 +832,7 @@ class static_dispatch extends Expression {
     public void code(PrintStream s, CgenClassTable classTable, CgenNode cn) {
         AbstractSymbol exprType = this.type_name;
 
-        CgenSupport.emitComment("Start dispatch " + exprType + "." + this.name, s);
+        CgenSupport.emitComment("Start static dispatch " + exprType + "." + this.name, s);
 
         for (Enumeration en = actual.getElements(); en.hasMoreElements(); ) {
             Expression arg = (Expression) en.nextElement();
@@ -855,11 +855,12 @@ class static_dispatch extends Expression {
         CgenNode c = (CgenNode) classTable.lookup(exprType);
         int methodOffset = c.getMethodOffset(this.name);
 
-        CgenSupport.emitLoad(CgenSupport.T1, CgenSupport.DISPTABLE_OFFSET, CgenSupport.ACC, s);
+        CgenSupport.emitLoadAddress(CgenSupport.T1, exprType + "_protObj", s);
+        CgenSupport.emitLoad(CgenSupport.T1, CgenSupport.DISPTABLE_OFFSET, CgenSupport.T1, s);
         CgenSupport.emitLoad(CgenSupport.T1, methodOffset, CgenSupport.T1, s);
         CgenSupport.emitJalr(CgenSupport.T1, s);
 
-        CgenSupport.emitComment("Finish dispatch " + exprType + "." + this.name, s);
+        CgenSupport.emitComment("Finish static dispatch " + exprType + "." + this.name, s);
     }
 
     @Override
@@ -1411,7 +1412,9 @@ class let extends Expression {
             CgenSupport.emitStore(CgenSupport.ACC, cn.idTableGetOffset(this.identifier), CgenSupport.FP, s);
         }
 
+        CgenSupport.emitComment("Let Body", s);
         this.body.code(s, classTable, cn);
+        CgenSupport.emitComment("Let Body Done", s);
 
         cn.idTableExitScope();
         CgenSupport.emitComment("Finish let", s);

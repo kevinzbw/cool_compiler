@@ -5,7 +5,9 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/examples/graph.cl" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/examples/io.cl" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CgenSupport.java" afterPath="$PROJECT_DIR$/CgenSupport.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cool-tree.java" afterPath="$PROJECT_DIR$/cool-tree.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/book_list.cl" afterPath="$PROJECT_DIR$/examples/book_list.cl" />
     </list>
     <ignored path="PA5.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -119,21 +121,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CgenSupport.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CgenSupport.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CgenSupport.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
+            <state relative-caret-position="187">
               <caret line="932" column="47" selection-start-line="932" selection-start-column="47" selection-end-line="932" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cool-tree.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="cool-tree.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cool-tree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1964">
-              <caret line="941" column="0" selection-start-line="941" selection-start-column="0" selection-end-line="941" selection-end-column="0" />
+            <state relative-caret-position="586">
+              <caret line="1416" column="52" selection-start-line="1416" selection-start-column="52" selection-end-line="1416" selection-end-column="52" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -195,8 +197,8 @@
         <option value="$PROJECT_DIR$/CgenClassTable.java" />
         <option value="$PROJECT_DIR$/identifierTable.java" />
         <option value="$PROJECT_DIR$/CgenNode.java" />
-        <option value="$PROJECT_DIR$/cool-tree.java" />
         <option value="$PROJECT_DIR$/CgenSupport.java" />
+        <option value="$PROJECT_DIR$/cool-tree.java" />
       </list>
     </option>
   </component>
@@ -246,7 +248,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -271,6 +272,7 @@
       <pane id="PackagesPane">
         <subPane />
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -722,7 +724,8 @@
       <workItem from="1462664277026" duration="7402000" />
       <workItem from="1462767216277" duration="10144000" />
       <workItem from="1462812095747" duration="238000" />
-      <workItem from="1462826807899" duration="17000" />
+      <workItem from="1462826807899" duration="161000" />
+      <workItem from="1462931405222" duration="1484000" />
     </task>
     <task id="LOCAL-00001" summary="before merge">
       <created>1460782568226</created>
@@ -836,11 +839,18 @@
       <option name="project" value="LOCAL" />
       <updated>1462779310635</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="May8-fixed emitMethodpPre SP">
+      <created>1462826872736</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1462826872736</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="129941000" />
+    <option name="totallyTimeSpent" value="131569000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -853,7 +863,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="15" y="50" width="1400" height="779" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18195051" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -866,7 +876,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946298" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24815905" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24815905" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2496318" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16421208" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -937,7 +947,8 @@
     <MESSAGE value="May1-fix assign debug &#10;" />
     <MESSAGE value="May7-add comments" />
     <MESSAGE value="May7-fixed case(self) and idtable" />
-    <option name="LAST_COMMIT_MESSAGE" value="May7-fixed case(self) and idtable" />
+    <MESSAGE value="May8-fixed emitMethodpPre SP" />
+    <option name="LAST_COMMIT_MESSAGE" value="May8-fixed emitMethodpPre SP" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1476,21 +1487,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cool-tree.java">
+    <entry file="file://$PROJECT_DIR$/CgenSupport.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1964">
-          <caret line="941" column="0" selection-start-line="941" selection-start-column="0" selection-end-line="941" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="187">
+          <caret line="932" column="47" selection-start-line="932" selection-start-column="47" selection-end-line="932" selection-end-column="47" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CgenSupport.java">
+    <entry file="file://$PROJECT_DIR$/cool-tree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="932" column="47" selection-start-line="932" selection-start-column="47" selection-end-line="932" selection-end-column="47" />
-          <folding />
+        <state relative-caret-position="586">
+          <caret line="1416" column="52" selection-start-line="1416" selection-start-column="52" selection-end-line="1416" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

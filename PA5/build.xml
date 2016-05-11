@@ -62,9 +62,9 @@
       <exec executable="python"> <arg line="compare-cgen.py examples/life.cl"/> </exec>
       <exec executable="python"> <arg line="compare-cgen.py examples/list.cl"/> </exec>
       <exec executable="python"> <arg line="compare-cgen.py examples/new_complex.cl"/> </exec>
-      <exec executable="python"> <arg line="compare-cgen.py examples/palindrome.cl"/> </exec>
+      <!-- <exec executable="python"> <arg line="compare-cgen.py examples/palindrome.cl"/> </exec> -->
       <exec executable="python"> <arg line="compare-cgen.py examples/primes.cl"/> </exec>
-      <exec executable="python"> <arg line="compare-cgen.py examples/sort_list.cl"/> </exec>
+      <!-- <exec executable="python"> <arg line="compare-cgen.py examples/sort_list.cl"/> </exec> -->
       <echo>
       You can check 'tests/NAME.diff" to know more about a failed test case.
     </echo>
