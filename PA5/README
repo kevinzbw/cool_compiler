@@ -175,10 +175,11 @@ Instructions
 
 Write-up for PA5
 ----------------
- (i) how late this assignment is, and (ii) how much of the total slip time you have left.
+ (i) how late this assignment is , and (ii) how much of the total slip time you have left.
 
-thorough discussion of design decisions and choice of test cases; a few paragraphs of coherent English sentences should be fine
-This file will contain the write-up for your assignment. It is critical that you explain design decisions, how your code is structured, and why you believe your design is a good one (i.e., why it leads to a correct and robust program). It is part of the assignment to explain things in text as well as to comment your code.
+(i) This is 48 hours late.
+(ii) cs164-fg has 15 hours left.
+     cs164-ff has 0 hours left.
 
 Design Decisions:
 We divided our compiler to two major parts. 
@@ -230,16 +231,81 @@ FP->para1
     In this part, we carefully generate our MIPS code according to the output from the reference compiler and the cool manual, except the case statement. For the case statement, firstly, we evaluate the expression and get the type. Then we check the following branches. If there is any match, we go to that branch. Otherwise, we check its parent with the branches. Repeat this procedure until we get a tag -1 which means there is no match. 
     We also emit comments at the beginning and the end of each code() for efficient debugging.
 
+test case: 
+
+In the example.cl, we tested all the features that not covered by the files in examples directory;
+
+triple inheritance;
+self_type multiple call;
+type case in let ;
+while loop;
+if else than;
+ 
 
 
+we used the examples of pa1 to debug our compiler.
+	
 
+	arith.cl	Tests various aspects of arithmetic in Cool.
 
+	atoi.cl		An implementation of the C function by the
+			same name. It converts a String into an Int.
 
+	atoi_test.cl	An example program using atoi.cl. Since you
+			will most likely use atoi.cl in the first
+			assignment, you should study this example.
 
+	list.cl		A very simple program showing how to create a
+			list data type for integers. It illustrates
+			inheritance and dynamic dispatch.
 
+	book_list.cl	Illustrates inheritance and in particular the
+			mechanism of STATIC DISPATCH and the CASE
+			statement.
 
+	cells.cl	Models a one-dimensional cellular automaton.
 
+	cool.cl		An short and obscure program.
 
+	io.cl		Shows how to use the IO class. (input/output)
+	
+ 	hairyscary.cl	Exercises many of the obscure features of the
+			language in obscure ways.			
 
+	hello_world.cl  The classic first program.
 
+	primes.cl	An unusual prime number generator.
 
+	graph.cl	A program reading descriptions of weighted-
+			directed graphs from stdin in text format.
+
+	g1.graph	A sample input to graph.cl
+
+	palindrome.cl	Recognizes palindromes.
+
+	complex.cl	Checks the = operator and cummulative effects of
+			method calls via a complex number object.
+
+        life.cl         The classic Game of Life
+
+	sort_list.cl	A more complex example sorting lists of integers.
+
+	null_string.cl	Not a valid Cool program: contains a string with
+			an embedded NULL character.
+
+        manual-ex1.cl   The example Cool program given in the Coolaid
+                        Reference Manual.
+
+        manual-ex2.s    The example assembly language program given in
+                        the Coolaid Reference Manual.
+
+        fact_exception.cl     Computes factorial with a simple use of
+                              exceptions.
+
+        finally_exception.cl  Simple example of using try-finally.
+
+        hello_exception.cl    Simple exception example that prints
+                              "Hello Exception!".
+
+        primes_exception.cl   A modification of the primes.cl example
+                              to use exceptions.
