@@ -1206,21 +1206,23 @@ class typcase extends Expression {
         CgenSupport.emitJal("_case_abort2", s);
         CgenSupport.emitLabelDef(notVoidLabel, s);
         CgenNode c;
-        if (expr.get_type() == TreeConstants.SELF_TYPE) {
-            c = cn;
-        } else {
-            c = (CgenNode) classTable.lookup(expr.get_type());
-        }
-        int curr_tag = classTable.getTag(c);
+//        if (expr.get_type() == TreeConstants.SELF_TYPE) {
+//            c = cn;
+//        } else {
+//            c = (CgenNode) classTable.lookup(expr.get_type());
+//        }
+//        int curr_tag = classTable.getTag(c);
         int beginLabel = CgenSupport.getNewLabelNumber();
         int matchLabel = CgenSupport.getNewLabelNumber();
         int missBranchLabel = CgenSupport.getNewLabelNumber();
 
         CgenSupport.emitComment("begin matching", s);
-        CgenSupport.emitLoadImm(CgenSupport.T1, curr_tag, s);
+        CgenSupport.emitLoad(CgenSupport.T1, 0, CgenSupport.ACC, s);
+        CgenSupport.emitMove(CgenSupport.T3, CgenSupport.T1, s);
+
         CgenSupport.emitLabelDef(beginLabel, s);
 
-        CgenSupport.emitBeq(CgenSupport.T1, "-1", missBranchLabel, s);
+        CgenSupport.emitBlti(CgenSupport.T1, 0, missBranchLabel, s);
 
         CgenSupport.emitComment("branches start", s);
         for (Enumeration e = cases.getElements(); e.hasMoreElements();) {
@@ -1248,7 +1250,9 @@ class typcase extends Expression {
         CgenSupport.emitComment("branches done", s);
 
         CgenSupport.emitLoadAddress(CgenSupport.T1, CgenSupport.CLASSINHERTTAB, s);
-        CgenSupport.emitLoad(CgenSupport.T1, curr_tag, CgenSupport.T1, s);
+        CgenSupport.emitAddu(CgenSupport.T1, CgenSupport.T1, CgenSupport.T3, s);
+        CgenSupport.emitLoad(CgenSupport.T1, 0, CgenSupport.T1, s);
+        CgenSupport.emitMove(CgenSupport.T3, CgenSupport.T1, s);
         CgenSupport.emitBranch(beginLabel, s);
 
         CgenSupport.emitLabelDef(missBranchLabel, s);

@@ -914,9 +914,9 @@ class CgenSupport {
      */
     static void emitMethodCode(PrintStream s, method m, CgenClassTable classTable, CgenNode cn) {
         cn.idTableEnterScope();
-        int index = 0;
+        int index = m.formals.getLength() - 1;
         for (Enumeration e = m.formals.getElements(); e.hasMoreElements(); ) {
-            cn.idTableAddID(((formalc) e.nextElement()).getName(), index++);
+            cn.idTableAddID(((formalc) e.nextElement()).getName(), index--);
         }
         emitMethodRef(cn.getName(), m.getName(), s);
         s.println(":");
