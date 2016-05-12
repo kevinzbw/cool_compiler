@@ -868,7 +868,12 @@ class CgenSupport {
      * Code initial method
      */
     static void emitInitMethodCode(PrintStream s, CgenNode cn, CgenClassTable cgenClassTable) {
-        emitMethodPre(s, null);
+        int numTemp = 0;
+        for (Enumeration e = cn.getAttrElement(); e.hasMoreElements(); ) {
+            attr a = (attr) e.nextElement();
+            numTemp += a.init.countTempID();
+        }
+        emitMethodPre(s, numTemp);
         if (!cn.getName().equals(TreeConstants.Object_)) {
             emitJal(cn.getParent() + CLASSINIT_SUFFIX, s);
         }
@@ -876,7 +881,7 @@ class CgenSupport {
             emitOneAttrAssignCode(s, e.nextElement(), cn, cgenClassTable);
         }
         emitMove(ACC, SELF, s);
-        emitMethodEnd(s, null, null);
+        emitMethodEnd(s, numTemp);
     }
 
     /**
@@ -899,7 +904,7 @@ class CgenSupport {
                 if (!cn.getParentNd().containsMethod(m)
                         || cn.getMethodClassPrefix(m)!=cn.getParentNd().getMethodClassPrefix(m)) {
                     emitComment("Num let"+ m.getName() + " " + Integer.toString(m.expr.countTempID()), s);
-                    cn.setNumTempID(m.expr.countTempID());
+                    cn.initTempIDOffset();
                     emitMethodCode(s, m, cgenClassTable, cn);
                 }
             }
@@ -920,35 +925,32 @@ class CgenSupport {
         }
         emitMethodRef(cn.getName(), m.getName(), s);
         s.println(":");
-        emitMethodPre(s, cn);
+        emitMethodPre(s, m.expr.countTempID());
         m.expr.code(s, classTable, cn);
-        emitMethodEnd(s, m, cn);
+        emitMethodEnd(s, m.formals.getLength() + m.expr.countTempID());
         cn.idTableExitScope();
     }
 
     /**
      * Code method start
      */
-    static void emitMethodPre(PrintStream s, CgenNode cn) {
-        if (cn != null) emitAddiu(SP, SP, -12 - 4 * cn.getNumTempID(), s);
-        else emitAddiu(SP, SP, -12, s);
+    static void emitMethodPre(PrintStream s, int tempOffset) {
+        emitAddiu(SP, SP, -12 - 4 * tempOffset, s);
         emitStore(FP, 3, SP, s);
         emitStore(SELF, 2, SP, s);
         emitStore(RA, 1, SP, s);
-        if (cn != null) emitAddiu(FP, SP, 16 + 4 * cn.getNumTempID(), s);
-        else emitAddiu(FP, SP, 16, s);
+        emitAddiu(FP, SP, 16 + 4 * tempOffset, s);
         emitMove(SELF, ACC, s);
     }
 
     /**
      * Code method end
      */
-    static void emitMethodEnd(PrintStream s, method m, CgenNode cn) {
+    static void emitMethodEnd(PrintStream s, int tempOffset) {
         emitLoad(FP, 3, SP, s);
         emitLoad(SELF, 2, SP, s);
         emitLoad(RA, 1, SP, s);
-        if (m != null) emitAddiu(SP, SP, 12 + 4 * (m.formals.getLength() + cn.getNumTempID()), s);
-        else emitAddiu(SP, SP, 12, s);
+        emitAddiu(SP, SP, 12 + 4 * tempOffset, s);
         emitReturn(s);
     }
 

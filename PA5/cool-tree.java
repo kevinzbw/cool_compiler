@@ -1218,8 +1218,7 @@ class typcase extends Expression {
 
         CgenSupport.emitComment("begin matching", s);
         CgenSupport.emitLoad(CgenSupport.T1, 0, CgenSupport.ACC, s);
-        CgenSupport.emitMove(CgenSupport.T3, CgenSupport.T1, s);
-
+        CgenSupport.emitMove("$t9", CgenSupport.T1, s);
         CgenSupport.emitLabelDef(beginLabel, s);
 
         CgenSupport.emitBlti(CgenSupport.T1, 0, missBranchLabel, s);
@@ -1250,12 +1249,14 @@ class typcase extends Expression {
         CgenSupport.emitComment("branches done", s);
 
         CgenSupport.emitLoadAddress(CgenSupport.T1, CgenSupport.CLASSINHERTTAB, s);
-        CgenSupport.emitAddu(CgenSupport.T1, CgenSupport.T1, CgenSupport.T3, s);
+        CgenSupport.emitSll("$t9", "$t9", 2, s);
+        CgenSupport.emitAddu(CgenSupport.T1, CgenSupport.T1, "$t9", s);
         CgenSupport.emitLoad(CgenSupport.T1, 0, CgenSupport.T1, s);
-        CgenSupport.emitMove(CgenSupport.T3, CgenSupport.T1, s);
+        CgenSupport.emitMove("$t9", CgenSupport.T1, s);
         CgenSupport.emitBranch(beginLabel, s);
 
         CgenSupport.emitLabelDef(missBranchLabel, s);
+        CgenSupport.emitMove(CgenSupport.ACC, CgenSupport.SELF, s);
         CgenSupport.emitJal("_case_abort", s);
 
         CgenSupport.emitLabelDef(matchLabel, s);

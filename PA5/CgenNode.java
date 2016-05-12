@@ -64,7 +64,7 @@ class CgenNode extends class_c {
     //Check ID
     private identifierTable idTable;
 
-    private int numTempID = 0;
+//    private int numTempID = 0;
     private int tempIDOffset = 0;
 
     /**
@@ -342,16 +342,16 @@ class CgenNode extends class_c {
     /**
      * Set the number of temp ID
      */
-    public void setNumTempID(int n) {
-        this.numTempID = n;
+    public void initTempIDOffset() {
+        this.tempIDOffset = 0;
     }
 
-    /**
-     * Get the number of temp ID
-     */
-    public int getNumTempID() {
-        return this.numTempID;
-    }
+//    /**
+//     * Get the number of temp ID
+//     */
+//    public int getNumTempID() {
+//        return this.numTempID;
+//    }
 
     /**
      * Get the new temp ID's offset
